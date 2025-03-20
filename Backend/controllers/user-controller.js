@@ -2,6 +2,7 @@ const JobModel = require("../models/job-model")
 const bcrypt = require("bcrypt")
 const UserModel = require("../models/user-model")
 const ApplicationModel = require("../models/application-model")
+const companyModel = require("../models/company-model")
 
 
 //signup
@@ -71,9 +72,10 @@ const getHomePage = function (req, res, next) {
 //logout
 const logout = (req, res) => {
   req.session.user = null;
-  req.session.alertMessage = "Logged Out Successfully!!!"
-  res.redirect("/")
+  req.session.alertMessage = "Logged Out Successfully!!!";
+  res.redirect("http://localhost:5173/");
 }
+
 //profile
 const getProfilePage = (req, res) => {
   let { user } = req.session
@@ -158,6 +160,13 @@ const getUserApplications = (req, res) => {
 const getAdminLogin = (req,res)=>{
   res.render("Login")
 }
+const preAdmin = async(req,res)=>{
+  let companies = await companyModel.find({});
+  let users = await UserModel.find({});
+  let jobs = await JobModel.find({});
+  let applications = await ApplicationModel.find({});
+  res.render("Admin/admin",{companies,users,jobs,applications})
+}
 module.exports = {
   getHomePage,
   getUserLogin,
@@ -172,5 +181,6 @@ module.exports = {
   applyJob,
   getUserApplications,
   logout,
-  getAdminLogin
+  getAdminLogin,
+  preAdmin
 }

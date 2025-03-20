@@ -67,7 +67,8 @@ const geCompanytHomePage = function (req, res) {
 const logout = function (req, res) {
     req.session.company = null;
     req.session.alertMessage = "Logged Out Successfully!!!"
-    res.redirect("/company")
+    res.redirect("http://localhost:5173/");
+
 }
 const getNewJobForm = function (req, res) {
     res.render("company/add-new-job", { company: req.session.company })

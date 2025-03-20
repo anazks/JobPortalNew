@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './JobPortal.css';
-
+import Accessibility from './Components/Accebility';
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [location, setLocation] = useState('');
   const [speechSynthesis, setSpeechSynthesis] = useState(null);
-  
+  const [showAccessibility, setShowAccessibility] = useState(false);
+  const [bgColor,setBgColor] = useState('');
+  const [largeText,SetlargeText] = useState('');
+   const [space,setSpace] = useState('');
+   const [highContrast,sethighContrast] = useState('');
   const jobCategories = [
     { title: 'Technology', icon: '💻', count: 1243 },
     { title: 'Healthcare', icon: '🏥', count: 857 },
@@ -24,6 +28,19 @@ function App() {
 
   // Initialize speech synthesis when component mounts
   useEffect(() => {
+    let accessibilityFeture = localStorage.getItem("accessibilityPreferences");
+    if (accessibilityFeture) {
+      let data = JSON.parse(accessibilityFeture);
+      if (data.darkMode) {
+        setBgColor('black');
+      }
+      if(data.largeText){
+        SetlargeText('60px');
+      }
+      if(data.lineSpacing){
+        setSpace('50px');
+      }
+    }
     if ('speechSynthesis' in window) {
       setSpeechSynthesis(window.speechSynthesis);
     }
@@ -59,24 +76,42 @@ function App() {
     <div className="app">
       {/* Header */}
       <header className="header">
-        <div className="container header-container">
-          <div className="logo" {...createSpeechHandlers("JobConnect - Find Your Dream Job Today")}>
-            <h1>JobConnect</h1>
-          </div>
-          <nav className="main-nav">
-            <a href="http://localhost:4000/login" className="nav-link active" {...createSpeechHandlers("Find Jobs")}>Find Jobs</a>
-            <a href="http://localhost:4000/company/signup" className="nav-link" {...createSpeechHandlers("Companies")}>Companies</a>
-            <a href="#" className="nav-link" {...createSpeechHandlers("Career Resources")}>Career Resources</a>
-            <a href="/admin" className="nav-link" {...createSpeechHandlers("Salary Guide")}>Salary Guide</a>
-          </nav>
-        </div>
-      </header>
+  <div className="container header-container">
+    <div className="logo" {...createSpeechHandlers("JobConnect - Find Your Dream Job Today")}>
+      <h1>JobConnect</h1>
+    </div>
+    <nav className="main-nav">
+      <a href="http://localhost:4000/login" className="nav-link active" {...createSpeechHandlers("Find Jobs")} style={{fontSize:largeText}}>Find Jobs</a>
+      <a href="http://localhost:4000/company/signup" className="nav-link" {...createSpeechHandlers("Companies")} style={{fontSize:largeText}}>Companies</a>
+      {/* <a href="#" className="nav-link" {...createSpeechHandlers("Career Resources")}>Career Resources</a> */}
+      <a href="http://localhost:4000/LoginRouter" className="nav-link" {...createSpeechHandlers("Salary Guide")} style={{fontSize:largeText}}>Admin</a>
+      
+      {/* Accessibility Icon */}
+      <button 
+        className="accessibility-icon-btn"
+        onClick={() => setShowAccessibility(true)}
+        {...createSpeechHandlers("Accessibility Options")}
+        aria-label="Open Accessibility Options"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+          <line x1="9" y1="9" x2="9.01" y2="9"></line>
+          <line x1="15" y1="9" x2="15.01" y2="9"></line>
+        </svg>
+      </button>
+    </nav>
+  </div>
+  
+  {/* Accessibility Component */}
+  {showAccessibility && <Accessibility onClose={() => setShowAccessibility(false)} />}
+</header>
 
       {/* Hero Section with Search */}
-      <section className="hero">
+      <section className="hero" style={{backgroundColor:bgColor,lineSpacing:space}}>
         <div className="container hero-container">
           <h2 className="hero-title" {...createSpeechHandlers("Find Your Dream Job Today")}>Find Your Dream Job Today</h2>
-          <p className="hero-description" {...createSpeechHandlers("Search through thousands of job listings to find the perfect match for your skills and experience.")}>
+          <p className="hero-description" style={{fontSize:largeText}} {...createSpeechHandlers("Search through thousands of job listings to find the perfect match for your skills and experience.")}>
             Search through thousands of job listings to find the perfect match for your skills and experience.
           </p>
           
@@ -114,9 +149,9 @@ function App() {
       </section>
 
       {/* Job Categories */}
-      <section className="categories">
+      <section className="categories" style={{backgroundColor:bgColor}}>
         <div className="container">
-          <h2 className="section-title" {...createSpeechHandlers("Explore Job Categories")}>Explore Job Categories</h2>
+          <h2 className="section-title" {...createSpeechHandlers("Explore Job Categories")}style={{fontSize:largeText}}>Explore Job Categories</h2>
           <div className="category-grid">
             {jobCategories.map((category, index) => (
               <div 
@@ -134,10 +169,10 @@ function App() {
       </section>
 
       {/* Featured Jobs */}
-      <section className="featured-jobs">
+      <section className="featured-jobs" style={{backgroundColor:bgColor}}>
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title" {...createSpeechHandlers("Featured Jobs")}>Featured Jobs</h2>
+            <h2 className="section-title" {...createSpeechHandlers("Featured Jobs")}style={{fontSize:largeText}}>Featured Jobs</h2>
             <a href="#" className="view-all" {...createSpeechHandlers("View All Jobs")}>View All Jobs →</a>
     
 
@@ -176,16 +211,16 @@ function App() {
               {...createSpeechHandlers("Fastest Growing Jobs. Access to the newest job postings from top companies around the world.")}
             >
               <div className="feature-icon">🚀</div>
-              <h3 className="feature-title">Fastest Growing Jobs</h3>
-              <p className="feature-description">Access to the newest job postings from top companies around the world.</p>
+              <h3 className="feature-title"style={{fontSize:largeText}}>Fastest Growing Jobs</h3>
+              <p className="feature-description" style={{fontSize:largeText}}>Access to the newest job postings from top companies around the world.</p>
             </div>
             <div 
               className="feature"
               {...createSpeechHandlers("Trusted by Employers. Over 10,000 companies post their vacancies on our platform regularly.")}
             >
               <div className="feature-icon">👔</div>
-              <h3 className="feature-title">Trusted by Employers</h3>
-              <p className="feature-description">Over 10,000 companies post their vacancies on our platform regularly.</p>
+              <h3 className="feature-title" style={{fontSize:largeText}}>Trusted by Employers</h3>
+              <p className="feature-description"style={{fontSize:largeText}}>Over 10,000 companies post their vacancies on our platform regularly.</p>
             </div>
             <div 
               className="feature"
@@ -193,14 +228,14 @@ function App() {
             >
               <div className="feature-icon">📱</div>
               <h3 className="feature-title">Mobile Friendly</h3>
-              <p className="feature-description">Search and apply for jobs on the go with our mobile-optimized platform.</p>
+              <p className="feature-description" style={{fontSize:largeText}}>Search and apply for jobs on the go with our mobile-optimized platform.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Newsletter */}
-      <section className="newsletter">
+      <section className="newsletter" style={{backgroundColor:bgColor}}>
         <div className="container">
           <h2 
             className="newsletter-title"
@@ -211,7 +246,7 @@ function App() {
           <p 
             className="newsletter-description"
             {...createSpeechHandlers("Subscribe to our newsletter and receive personalized job recommendations directly to your inbox.")}
-          >
+            style={{fontSize:largeText}}>
             Subscribe to our newsletter and receive personalized job recommendations directly to your inbox.
           </p>
           <div className="newsletter-form">
@@ -240,7 +275,7 @@ function App() {
               {...createSpeechHandlers("JobConnect. Connecting talented professionals with their dream careers since 2018.")}
             >
               <h3 className="footer-title">JobConnect</h3>
-              <p className="footer-description">Connecting talented professionals with their dream careers since 2018.</p>
+              <p className="footer-description"style={{fontSize:largeText}}>Connecting talented professionals with their dream careers since 2018.</p>
             </div>
             <div className="footer-links">
               <h4 

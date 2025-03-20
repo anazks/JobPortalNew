@@ -174,6 +174,17 @@
 </head>
 
 <body>
+    <script>
+         function speakText(text) {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        speechSynthesis.speak(utterance);
+      } else {
+        alert('Your browser does not support text-to-speech.');
+      }
+    }
+    </script>
 
     <!--==========================
     Header
@@ -189,7 +200,6 @@
         <nav id="nav-menu-container">
             <ul class="nav-menu">
                 <li class="menu-active"><a href="#intro" tabindex="1" accesskey="1">Home</a></li>
-                <li><a href="/company" tabindex="2" accesskey="2">Companies</a></li>
                 {{#if user}}
                 <li class="menu-has-children"><a href="#" tabindex="3" accesskey="3">{{user.name}}</a>
                     <ul>
@@ -200,6 +210,8 @@
                 </li>
                 {{else}}
                 <li><a href="/login" tabindex="3" accesskey="3">Login</a></li>
+                <li><a href="/company" tabindex="2" accesskey="2">Companies</a></li>
+
                 <li><a href="/signup" tabindex="4" accesskey="4">Signup</a></li>
                 <li class="menu-has-children"><a href="#" tabindex="5" accesskey="5">For Employers</a>
                     <ul>
@@ -422,10 +434,9 @@
                         <div class="carousel-background"><img src="/images/intro-carousel/2.jpg" alt=""></div>
                         <div class="carousel-container">
                             <div class="carousel-content">
-                                <h2>Connecting talent to opportunity</h2>
-                                <h2>one click at a time.!</h2>
+                               
                                 {{#if user}}
-                                <a href="/user-jobs" class="btn-get-started scrollto">Get Started</a>
+                                <a href="/user-jobs" class="btn-get-started scrollto">Find Jobs Now</a>
                                 {{else}}
                                 <a href="/signup" class="btn-get-started scrollto">Get Started</a>
                                 {{/if}}
@@ -438,10 +449,30 @@
             </div>
         </div>
     </section><!-- #intro -->
-<button onclick="openInIframe()">Open Resume Builder</button>
+<button onclick="openInIframe()" onmouseenter="speakButtonText(this)" onmouseleave="stopSpeaking()">Open Resume Builder</button>
+
+<script>
+  function speakButtonText(element) {
+    const text = element.textContent;
+    const speech = new SpeechSynthesisUtterance(text);
+    
+    // Optional: Configure voice settings
+    speech.rate = 1; // Speed (0.1 to 10)
+    speech.pitch = 1; // Pitch (0 to 2)
+    speech.volume = 1; // Volume (0 to 1)
+    
+    // Speak the text
+    window.speechSynthesis.speak(speech);
+  }
+  
+  function stopSpeaking() {
+    window.speechSynthesis.cancel();
+  }
+</script>
 <div id="iframeContainer" style="margin-top: 10px;"></div>
 
 <script>
+    
   function openInIframe() {
     document.getElementById("iframeContainer").innerHTML = `
       <iframe src="https://e-resume.vercel.app/builder" width="100%" height="600px" style="border: none;"></iframe>
@@ -542,11 +573,47 @@
             <div class="container">
 
                 <header class="section-header">
-                    <h3>About Us</h3>
-                    <p>We are professional Software Developers,we solve problems with innovative Software ideas.We help companies design build,launch and support innovative software products accross a wide range of industries,and any one who wish to become an IT developer can also join with us. 
-                    </p>
-                </header>
-
+    <h3>About Us</h3>
+    <p id="about-us-text">We are professional Software Developers, we solve problems with innovative Software ideas. We help companies design, build, launch and support innovative software products across a wide range of industries, and anyone who wishes to become an IT developer can also join with us.</p>
+    <button id="speak-button" aria-label="Listen to text">🔊 Listen</button>
+    
+    <script>
+        let accblity = localStorage.getItem('accblity');
+        document.addEventListener('DOMContentLoaded', function() {
+            const speakButton = document.getElementById('speak-button');
+            const textElement = document.getElementById('about-us-text');
+            
+            speakButton.addEventListener('click', function() {
+                const text = textElement.textContent;
+                const speech = new SpeechSynthesisUtterance(text);
+                
+                // Optional: Configure voice settings
+                speech.rate = 1; // Speed (0.1 to 10)
+                speech.pitch = 1; // Pitch (0 to 2)
+                speech.volume = 1; // Volume (0 to 1)
+                
+                // Speak the text
+                window.speechSynthesis.speak(speech);
+            });
+            
+            // Mouse hover functionality
+            const headerSection = document.querySelector('.section-header');
+            
+            headerSection.addEventListener('mouseenter', function() {
+                const text = textElement.textContent;
+                const speech = new SpeechSynthesisUtterance(text);
+                window.speechSynthesis.speak(speech);
+            });
+            
+            headerSection.addEventListener('mouseleave', function() {
+                window.speechSynthesis.cancel();
+            });
+        });
+    </script>
+</header>
+<script>
+    
+</script>
                 <div class="row about-cols">
 
                     <div class="col-md-4 wow fadeInUp">
