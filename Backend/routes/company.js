@@ -18,6 +18,9 @@ const {
     shortListApplication,
     acceptApplication,
     rejectApplication,
+    updateJob,
+    GetupdateJob,
+    deletejob
 
 } = require("../controllers/company-controller")
 
@@ -36,6 +39,9 @@ router.route('/company-applications').get(checkCompany, getCompanyApplications);
 router.route("/short-list/:id").get(checkCompany, shortListApplication);
 router.route("/accept-application/:id").get(checkCompany, acceptApplication);
 router.route("/reject-application/:id").get(checkCompany, rejectApplication);
+router.route('/update-job').post(updateJob);
+router.route('/update-job-page/:id').get(GetupdateJob);
+router.route('/delete-job/:id').get(deletejob);
 
 
 module.exports = router;

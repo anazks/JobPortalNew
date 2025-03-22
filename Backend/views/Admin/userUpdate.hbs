@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="/stylesheets/login.css">
+
+<div class="container">
+    <div class="card">
+        <h1>AUpdate User</h1>
+        <form action="/update-user" method="post">
+            <div class="form-group">
+                <input type="text" class="form-control" name="name" value="{{user.name}}" id="exampleInputEmail1"
+                    aria-describedby="emailHelp" placeholder="Enter Title" required>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="email" value="{{user.email}}" id="exampleInputEmail1"
+                    aria-describedby="emailHelp" placeholder="Enter Program description" required>
+            </div>
+            <div class="form-group">
+            
+            <div class="form-group">
+                <input type="text" class="form-control" name="phone_no" value="{{user.phone_no}}" id="exampleInputEmail1"
+                    aria-describedby="emailHelp" placeholder="Enter pphoneno" required>
+            </div>
+            {{!-- <div class="form-group">
+                <input type="text" class="form-control" name="category" value="{{user.education}}" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="Enter area" required>
+            </div> --}}
+          
+            {{!-- <input type="hidden" name="company_id" value="{{company._id}}"> --}}
+            {{!-- <input type="hidden" name="company_id" value="{{job.company_id}}"> --}}
+            <input type="hidden" name="id" value="{{user._id}}">
+            <button type="submit" class="btn submit-btn">Upload Company</button>
+        </form>
+    </div>
+</div>

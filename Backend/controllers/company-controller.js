@@ -92,6 +92,7 @@ const getProfilePage = function (req, res) {
     res.render("company/profile", { company: req.session.company })
 }
 const getCompanyUpdateForm = function (req, res) {
+    console.log(req.params.id,"getCompanyUpdateForm");
     const { company } = req.session;
     console.log(company);
     res.render("company/update-company", { id: req.params.id, company })
@@ -151,6 +152,24 @@ const rejectApplication = async function (req, res) {
     req.session.alertMessage = "Application is Rejected!!!"
     res.redirect("/company/company-applications");
 };
+const updateJob = async(req,res)=>{
+    const id = req.body.job_id;
+    const job = await JobModel.findOneAndUpdate
+    ({_id:id},req.body,{new:true}); 
+    // req.session.alertMessage = "Job Updated Successfully";
+    res.redirect("/company"); 
+}
+const GetupdateJob = async(req,res)=>{
+    const {id} = req.params;
+    const job = await JobModel.findOne({_id:id});
+    console.log(job);
+    res.render("company/update-job",{job});
+}
+const deletejob = async(req,res)=>{
+    const {id} = req.params;
+    const job = await JobModel.findOneAndDelete({_id:id});
+    res.redirect("/company");
+}
 module.exports = {
     getCompanyLogin,
     doCompanyLogin,
@@ -167,5 +186,8 @@ module.exports = {
     getCompanyApplications,
     shortListApplication,
     acceptApplication,
-    rejectApplication
+    rejectApplication,
+    updateJob,
+    GetupdateJob,
+    deletejob
 } 

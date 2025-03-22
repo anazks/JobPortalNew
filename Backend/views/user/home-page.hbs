@@ -201,7 +201,9 @@
             <ul class="nav-menu">
                 <li class="menu-active"><a href="#intro" tabindex="1" accesskey="1">Home</a></li>
                 {{#if user}}
-                <li class="menu-has-children"><a href="#" tabindex="3" accesskey="3">{{user.name}}</a>
+                <li class="menu-has-children"><a href="/profile" tabindex="3" accesskey="3">{{user.name}}</a>
+                <li><a href="/getMyJobs" tabindex="2" accesskey="2">My Jobs</a></li>
+
                     <ul>
                         <li><a href="/profile" tabindex="4" accesskey="4"><button style="width:100%;">Your Profile</button></a>
                         </li><br>

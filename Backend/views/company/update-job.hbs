@@ -3,13 +3,13 @@
 <div class="container">
     <div class="card">
         <h1>Add New Program</h1>
-        <form action="/company/add-new-job" method="post">
+        <form action="/company/update-job" method="post">
             <div class="form-group">
-                <input type="text" class="form-control" name="title" id="exampleInputEmail1"
+                <input type="text" class="form-control" name="title" value="{{job.title}}" id="exampleInputEmail1"
                     aria-describedby="emailHelp" placeholder="Enter Title" required>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" name="description" id="exampleInputEmail1"
+                <input type="text" class="form-control" name="description" value="{{job.description}}" id="exampleInputEmail1"
                     aria-describedby="emailHelp" placeholder="Enter Program description" required>
             </div>
             <div class="form-group">
@@ -24,15 +24,17 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" name="salary" id="exampleInputEmail1"
+                <input type="text" class="form-control" name="salary" value="{{job.salary}}" id="exampleInputEmail1"
                     aria-describedby="emailHelp" placeholder="Enter payment in ₹" required>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" name="area" id="exampleInputEmail1" aria-describedby="emailHelp"
+                <input type="text" class="form-control" name="area" value="{{job.area}}" id="exampleInputEmail1" aria-describedby="emailHelp"
                     placeholder="Enter area" required>
             </div>
-            <input type="hidden" name="company_name" value="{{company.name}}">
-            <input type="hidden" name="company_id" value="{{company._id}}">
+            <input type="hidden" name="company_name" value="{{job.company_name}}">
+            <input type="hidden" name="company_id" value="{{job.company_id}}">
+            {{!-- <input type="hidden" name="company_id" value="{{job.company_id}}"> --}}
+            <input type="hidden" name="job_id" value="{{job._id}}">
             <button type="submit" class="btn submit-btn">Upload Program</button>
         </form>
     </div>

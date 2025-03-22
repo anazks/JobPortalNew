@@ -241,6 +241,8 @@
             <th>Address</th>
             <th>Area</th>
             <th>Status</th>
+            <th>Action</th>
+            <th>Action</th>            
           </tr>
         </thead>
         <tbody>
@@ -253,6 +255,9 @@
             <td>{{this.address}}</td>
             <td>{{this.area}}</td>
             <td>{{#if this.completed}}<span class="status-completed">Completed</span>{{else}}<span class="status-pending">Pending</span>{{/if}}</td>
+            <td><span class="status-completed"> <a href="/deleteCompany/{{_id}}" class="btn btn-danger">Delete</a></span><span class="status-pending"></span></td>
+              
+            <td>   <a href="/UpdateCompany/{{_id}}" class="btn btn-success">update</a>   </td>
           </tr>
           {{/each}}
         </tbody>
@@ -270,7 +275,7 @@
             <th>Name</th>
             <th>Email</th>
             <th>Phone</th>
-            <th>Address</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -279,7 +284,11 @@
             <td>{{this.name}}</td>
             <td>{{this.email}}</td>
             <td>{{this.phone_no}}</td>
-            <td>{{this.address}}</td>
+            <td>
+              <a href="/deleteUser/{{_id}}" class="btn btn-danger">Delete</a>
+              <a href="/UpdateUser/{{_id}}" class="btn btn-success">update</a>
+
+            </td>
           </tr>
           {{/each}}
         </tbody>

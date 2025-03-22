@@ -15,7 +15,14 @@ const { getUserLogin,
     getUserApplications,
     logout,
     getAdminLogin,
-    preAdmin
+    preAdmin,
+    getMyJobs,
+    deleteCompany,
+    deleteUser,
+    updateCompany,
+    updateCompanyForm,
+    getUserUpdatePage,
+    updateUser
 } = require("../controllers/user-controller")
 
 //middleware for authentication
@@ -34,7 +41,12 @@ router.route('/apply-job/:id').post(checkUser, applyJob) //job id
 router.route('/user-applications/:id').get(checkUser, getUserApplications);
 router.route('/LoginRouter').get(getAdminLogin)
 router.route('/preAdmin').get(preAdmin)
+router.route('/getMyJobs').get(getMyJobs);
+router.route('/deleteCompany/:id').get(deleteCompany);
+router.route('/deleteUser/:id').get(deleteUser);
+router.route('/updateCompany/:id').get(updateCompany);
+router.route('/update-Company').post(updateCompanyForm);
 
-
-
+router.route('/UpdateUser/:id').get(getUserUpdatePage)
+router.route('/update-user').post(updateUser)
 module.exports = router;

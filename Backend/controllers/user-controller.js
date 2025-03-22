@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt")
 const UserModel = require("../models/user-model")
 const ApplicationModel = require("../models/application-model")
 const companyModel = require("../models/company-model")
+const { use } = require("../routes")
 
 
 //signup
@@ -167,6 +168,161 @@ const preAdmin = async(req,res)=>{
   let applications = await ApplicationModel.find({});
   res.render("Admin/admin",{companies,users,jobs,applications})
 }
+
+const getMyJobs = async (req, res) => {
+  try {
+    let { user } = req.session;
+    // Find all applications for the current user
+    let applications = await ApplicationModel.find({ user_id: user._id });
+    
+    // Method 1: Using Promise.all with separate queries
+    const jobsWithDetails = await Promise.all(
+      applications.map(async (application) => {
+        // Find job details for each application
+        const jobDetails = await JobModel.findOne({ _id: application.job_id });
+        
+        // Return combined data
+        return {
+          application: application.toObject(),
+          job: jobDetails ? jobDetails.toObject() : null
+        };
+      })
+    );
+    
+    // For API endpoint
+    if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+      return res.status(200).json({ success: true, data: jobsWithDetails });
+    }
+    
+    // For web view - render HBS template
+    return res.render('user/myJobs', { 
+      data: jobsWithDetails,
+      user: req.session.user
+    });
+  } catch (error) {
+    console.error('Error fetching job applications:', error);
+    
+    // For API endpoint
+    if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+      return res.status(500).json({ success: false, message: 'Error fetching job applications' });
+    }
+    
+    // For web view
+    return res.render('error', { 
+      message: 'Error fetching your applications',
+      error: process.env.NODE_ENV === 'development' ? error : {}
+    });
+  }
+};
+
+//   try {
+//     let { user } = req.session;
+//     // Find all applications for the current user
+//     console.log(user._id,"user id");
+//     let applications = await ApplicationModel.find({ user_id: user._id });
+    
+//     // Method 1: Using Promise.all with separate queries
+//     const jobsWithDetails = await Promise.all(
+//       applications.map(async (application) => {
+//         // Find job details for each application
+//         const jobDetails = await JobModel.findOne({ _id: application.job_id });
+        
+//         // Return combined data
+//         return {
+//           application: application.toObject(),
+//           job: jobDetails ? jobDetails.toObject() : null
+//         };
+//       })
+//     );
+//     console.log('Jobs with details:', jobsWithDetails);
+//     // res.status(200).json({ success: true, data: jobsWithDetails });
+//     res.render("user/myJobs",{jobsWithDetails,success: true})
+//   } catch (error) {
+//     console.error('Error fetching job applications:', error);
+//     res.status(500).json({ success: false, message: 'Error fetching job applications' });
+//   }
+// };
+const deleteCompany = async (req, res) => {
+  try {
+    let { id } = req.params;
+    const company = await companyModel.findOneAndDelete({ _id:id });
+    if (company) {
+      req.session.alertMessage = "Company Deleted successfully";
+      return res.redirect("/preAdmin");
+    }
+    req.session.alertMessage = "Couldn't Delete Company. Retry" 
+    res.redirect("/preAdmin")
+  } catch (error) {
+    console.log(error);
+    req.session.alertMessage = "Couldn't Delete Company. Retry"
+    res.redirect("/preAdmin")
+  }
+}
+const deleteUser = async (req, res) => {
+    try {
+      let { id } = req.params;
+      const user = await UserModel.findOneAndDelete({ _id:id }); 
+      if (user) {
+        req.session.alertMessage = "User Deleted successfully";
+        return res.redirect("/preAdmin");
+      }
+  }catch(error) {
+    console.log(error);
+    req.session.alertMessage = "Couldn't Delete User. Retry"
+    res.redirect("/preAdmin")
+  }
+}
+const updateCompany   = async (req, res) => {
+  console.log(req.params.id,"getCompanyUpdateForm");
+    let company = await companyModel.findOne({ _id: req.params.id})
+    console.log(company);
+    res.render("Admin/CompanyUpdate", {  company })
+}
+const updateCompanyForm = async (req, res) => {
+  try {
+    let { id } = req.body;
+    const company = await companyModel.findOneAndUpdate({ _id: id }, req
+    .body, { new: true });
+    if (company) {
+      req.session.alertMessage = "Company Updated successfully";
+      return res.redirect("/preAdmin");
+    }
+    req.session.alertMessage = "Couldn't Update Company. Retry"
+    res.redirect("/preAdmin")
+  } catch (error) {
+    console.log(error);
+    req.session.alertMessage = "Couldn't Update Company. Retry"
+    res.redirect("/preAdmin")
+  }
+}
+const getUserUpdatePage = async (req, res) => {
+  // let { user } = req.session;
+  let id = req.params.id;
+  let users   = await UserModel.find({_id:id})
+  let user = users[0];
+  console.log(user);
+  res.render("Admin/userUpdate",{user})
+}
+const updateUser = async (req,res)=>{
+  try {
+    let id = req.body.id;
+    const user = await UserModel
+    .findOneAndUpdate({
+      _id: id
+    }, req.body, {
+      new: true
+    });
+    if (user) {
+      req.session.alertMessage = "User Updated successfully";
+      return res.redirect("/preAdmin");
+    }
+    req.session.alertMessage = "Couldn't Update User. Retry"
+  } catch (error) {
+    console.log(error);
+    req.session.alertMessage = "Couldn't Update User. Retry"
+    res.redirect("/preAdmin")
+  }
+}
 module.exports = {
   getHomePage,
   getUserLogin,
@@ -182,5 +338,12 @@ module.exports = {
   getUserApplications,
   logout,
   getAdminLogin,
-  preAdmin
+  preAdmin,
+  getMyJobs,
+  deleteCompany,
+  deleteUser,
+  updateCompany,
+  updateCompanyForm,
+  getUserUpdatePage,
+  updateUser
 }
