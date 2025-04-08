@@ -4,6 +4,8 @@
  */
 
 /* CSS Reset and Base Styles */
+@import url('https://fonts.googleapis.com/css2?family=OpenDyslexic&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -472,12 +474,62 @@
     color: #888;
     font-size: 14px;
   }
+  /* High Contrast Mode */
+.high-contrast {
+  background-color: rgb(64, 235, 7) !important;
+  color: rgb(21, 21, 19) !important;
+}
+
+/* Dark Mode */
+.dark-mode {
+  background-color: #121212 !important;
+  color: rgb(28, 26, 26) !important;
+}
+
+/* Large Text */
+.large-text {
+  font-size: 20px !important;
+}
+
+/* Grayscale Mode */
+.grayscale {
+  filter: grayscale(100%) !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+
+
+/* Dyslexia-Friendly Font */
+.dyslexia-font {
+  font-family: 'Lexend', 'Comic Sans MS', sans-serif !important;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* Increased Line Spacing */
+.increased-spacing {
+  line-height: 2 !important;
+  letter-spacing: 1px !important;
+}
+
+/* Larger Cursor */
+.large-cursor {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16"><path fill="black" d="M1 1 L15 8 L8 8 L8 15 L1 1"></path></svg>') 16 16, auto !important;
+}
+
   
   /* Media Queries */
   @media (min-width: 768px) {
     .main-nav {
       display: flex;
     }
+    
     
     .search-form {
       flex-direction: row;
@@ -525,3 +577,4 @@
       grid-template-columns: repeat(4, 1fr);
     }
   }
+  

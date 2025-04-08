@@ -202,13 +202,14 @@
                 <li class="menu-active"><a href="#intro" tabindex="1" accesskey="1">Home</a></li>
                 {{#if user}}
                 <li class="menu-has-children"><a href="/profile" tabindex="3" accesskey="3">{{user.name}}</a>
-                <li><a href="/getMyJobs" tabindex="2" accesskey="2">My Jobs</a></li>
-
-                    <ul>
+                  <ul>
                         <li><a href="/profile" tabindex="4" accesskey="4"><button style="width:100%;">Your Profile</button></a>
                         </li><br>
                         <li><a href="/logout" tabindex="5" accesskey="5"><button style="width:100%;">Logout</button></a></li><br>
                     </ul>
+                <li><a href="/getMyJobs" tabindex="2" accesskey="2">My Jobs</a></li>
+
+                
                 </li>
                 {{else}}
                 <li><a href="/login" tabindex="3" accesskey="3">Login</a></li>

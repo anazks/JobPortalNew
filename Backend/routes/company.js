@@ -20,7 +20,11 @@ const {
     rejectApplication,
     updateJob,
     GetupdateJob,
-    deletejob
+    deletejob,
+    Invite,
+    offerLetter,
+    reports,
+    
 
 } = require("../controllers/company-controller")
 
@@ -42,6 +46,7 @@ router.route("/reject-application/:id").get(checkCompany, rejectApplication);
 router.route('/update-job').post(updateJob);
 router.route('/update-job-page/:id').get(GetupdateJob);
 router.route('/delete-job/:id').get(deletejob);
-
-
+router.route('/Invite/:id').get(checkCompany,Invite)
+router.route('/offerLetter/:id').get(offerLetter)
+router.route('/reports').get(checkCompany,reports)
 module.exports = router;

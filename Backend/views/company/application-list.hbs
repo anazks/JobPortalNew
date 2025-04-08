@@ -121,8 +121,22 @@
                                         onclick="return confirm('Are you sure you want to reject this JOB APPLICATION?');">Reject
                                         <i class="fa-solid fa-xmark"></i></a>
                                     </p>
+                                    <br>
+                                     <a href="http://localhost:3000/" target="_blank"
+                                            class="btn btn-outline-info ms-5"
+                                           >Live Interview
+                                    <i class="fa-solid fa-xmark"></i></a> <br>
+                                    <br>
+                                    <a href="/company/Invite/{{_id}}" target="_blank"
+                                            class="btn btn-outline-info ms-5"
+                                           >Sent Invitation
+                                    <i class="fa-solid fa-mail"></i></a>
                                     {{else}}
                                     <p class="card-text text-success">Accepted the Application</p>
+                                     <a href="/company/offerLetter/{{_id}}" target="_blank"
+                                            class="btn btn-outline-success ms-5"
+                                           >Sent Offer letter
+                                    <i class="fa-solid fa-mail"></i></a>
                                     {{/if}}
                                     {{/if}}
                                 </div>

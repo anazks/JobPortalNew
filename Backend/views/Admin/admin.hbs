@@ -35,11 +35,61 @@
       color: #343a40;
     }
     
-    .content {
-      flex-grow: 1;
+    .sidebar {
+      width: 240px;
+      background-color: #343a40;
+      color: white;
+      height: 100vh;
+      position: fixed;
+      padding: 30px 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+    
+    .sidebar h2 {
+      margin-bottom: 30px;
+      font-size: 22px;
+      text-align: center;
+    }
+    
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .sidebar ul li {
+      padding: 12px 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+    
+    .sidebar ul li:hover {
+      background-color: #495057;
+    }
+    
+    .sidebar ul li i {
+      margin-right: 10px;
+    }
+    
+    .sidebar .btn {
+      width: 100%;
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .main-content {
+      margin-left: 260px;
       padding: 30px;
-      max-width: 1400px;
-      margin: 0 auto;
+      flex-grow: 1;
+    }
+    
+    .content-section {
+      display: none;
+    }
+    
+    .content-section.active {
+      display: block;
     }
     
     .dashboard-header {
@@ -142,6 +192,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      text-decoration: none;
     }
     
     .btn:hover {
@@ -154,6 +205,14 @@
     
     .btn-success:hover {
       background-color: #2d9200;
+    }
+    
+    .btn-danger {
+      background-color: #dc3545;
+    }
+    
+    .btn-danger:hover {
+      background-color: #bb2d3b;
     }
     
     .btn-container {
@@ -203,109 +262,118 @@
   </style>
 </head>
 <body>
-  <div class="content">
-    <div class="dashboard-header">
-      <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
-      <p>Welcome back, Admin</p>
-      <a href="/logout" class="btn btn-success">Logout</a>
-    </div>
-    
-    <div class="stats-container">
-      <div class="stat-card">
-        <h3>Total Companies</h3>
-        <p>1,024</p>
-      </div>
-      <div class="stat-card">
-        <h3>Total Users</h3>
-        <p>856</p>
-      </div>
-      <div class="stat-card">
-        <h3>Pending Tasks</h3>
-        <p>48</p>
-      </div>
-      <div class="stat-card">
-        <h3>Completed Tasks</h3>
-        <p>976</p>
-      </div>
-    </div>
-    
-    <div class="card">
-            <a href="http://localhost:4000/admin/resources/Company" class="btn btn-success">Update data</a>
-      <h3>Company Data</h3>
-      <table id="companyTable">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Category</th>
-            <th>Address</th>
-            <th>Area</th>
-            <th>Status</th>
-            <th>Action</th>
-            <th>Action</th>            
-          </tr>
-        </thead>
-        <tbody>
-          {{#each companies}}
-          <tr>
-            <td>{{this.name}}</td>
-            <td>{{this.email}}</td>
-            <td>{{this.phone_no}}</td>
-            <td>{{this.category}}</td>
-            <td>{{this.address}}</td>
-            <td>{{this.area}}</td>
-            <td>{{#if this.completed}}<span class="status-completed">Completed</span>{{else}}<span class="status-pending">Pending</span>{{/if}}</td>
-            <td><span class="status-completed"> <a href="/deleteCompany/{{_id}}" class="btn btn-danger">Delete</a></span><span class="status-pending"></span></td>
-              
-            <td>   <a href="/UpdateCompany/{{_id}}" class="btn btn-success">update</a>   </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-      <button class="btn" onclick="downloadCompanyReport()">
-        <i class="fas fa-file-pdf"></i> Download Company Report
-      </button>
-    </div>
-    
-    <div class="card">
-      <h3>User Data</h3>
-      <table id="userTable">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each users}}
-          <tr>
-            <td>{{this.name}}</td>
-            <td>{{this.email}}</td>
-            <td>{{this.phone_no}}</td>
-            <td>
-              <a href="/deleteUser/{{_id}}" class="btn btn-danger">Delete</a>
-              <a href="/UpdateUser/{{_id}}" class="btn btn-success">update</a>
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul>
+      <li onclick="showSection('dashboard')" class="active"><i class="fas fa-chart-line"></i> Dashboard</li>
+      <li onclick="showSection('company')"><i class="fas fa-building"></i> Companies</li>
+      <li onclick="showSection('user')"><i class="fas fa-users"></i> Users</li>
+    </ul>
+    <a href="/logout" class="btn btn-success"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
 
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-      <button class="btn" onclick="downloadUserReport()">
-        <i class="fas fa-file-pdf"></i> Download User Report
-      </button>
+  <div class="main-content">
+    <div id="dashboard" class="content-section active">
+      <div class="dashboard-header">
+        <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+        <p>Welcome back, Admin</p>
+      </div>
+
+      <div class="stats-container">
+        <div class="stat-card"><h3>Total Companies</h3><p>1,024</p></div>
+        <div class="stat-card"><h3>Total Users</h3><p>856</p></div>
+        <div class="stat-card"><h3>Pending Tasks</h3><p>48</p></div>
+        <div class="stat-card"><h3>Completed Tasks</h3><p>976</p></div>
+      </div>
+      
+      <div class="btn-container">
+        <button class="btn btn-success" onclick="downloadAllReports()">
+          <i class="fas fa-download"></i> Download All Reports
+        </button>
+      </div>
     </div>
-    
-    <div class="btn-container">
-      <button class="btn btn-success" onclick="downloadAllReports()">
-        <i class="fas fa-download"></i> Download All Reports
-      </button>
+
+    <div id="company" class="content-section">
+      <div class="card">
+        <div class="dashboard-header">
+          <h1><i class="fas fa-building"></i> Companies Management</h1>
+          <a href="http://localhost:4000/admin/resources/Company" class="btn btn-success">
+            <i class="fas fa-plus"></i> Update Data
+          </a>
+        </div>
+        
+        <table id="companyTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Category</th>
+              <th>Address</th>
+              <th>Area</th>
+              <th>Status</th>
+              <th>Action</th>
+              <th>Action</th>            
+            </tr>
+          </thead>
+          <tbody>
+            {{#each companies}}
+            <tr>
+              <td>{{this.name}}</td>
+              <td>{{this.email}}</td>
+              <td>{{this.phone_no}}</td>
+              <td>{{this.category}}</td>
+              <td>{{this.address}}</td>
+              <td>{{this.area}}</td>
+              <td>{{#if this.completed}}<span class="status-completed">Completed</span>{{else}}<span class="status-pending">Pending</span>{{/if}}</td>
+              <td><a href="/deleteCompany/{{_id}}" class="btn btn-danger">Delete</a></td>
+              <td><a href="/UpdateCompany/{{_id}}" class="btn btn-success">Update</a></td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+        <button class="btn" onclick="downloadCompanyReport()">
+          <i class="fas fa-file-pdf"></i> Download Company Report
+        </button>
+      </div>
+    </div>
+
+    <div id="user" class="content-section">
+      <div class="card">
+        <div class="dashboard-header">
+          <h1><i class="fas fa-users"></i> Users Management</h1>
+        </div>
+        
+        <table id="userTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each users}}
+            <tr>
+              <td>{{this.name}}</td>
+              <td>{{this.email}}</td>
+              <td>{{this.phone_no}}</td>
+              <td>
+                <a href="/deleteUser/{{_id}}" class="btn btn-danger">Delete</a>
+                <a href="/UpdateUser/{{_id}}" class="btn btn-success">Update</a>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+        <button class="btn" onclick="downloadUserReport()">
+          <i class="fas fa-file-pdf"></i> Download User Report
+        </button>
+      </div>
     </div>
   </div>
-  
+
   <script>
     // Initialize DataTables when document is ready
     $(document).ready(function() {
@@ -322,7 +390,39 @@
         "pageLength": 10,
         "order": [[0, "asc"]]
       });
+      
+      // Set dashboard as active section by default
+      showSection('dashboard');
     });
+    
+    // Section navigation function
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.content-section').forEach(function(section) {
+        section.classList.remove('active');
+        section.style.display = 'none';
+      });
+      
+      // Remove active class from all sidebar items
+      document.querySelectorAll('.sidebar ul li').forEach(function(item) {
+        item.classList.remove('active');
+      });
+      
+      // Show selected section
+      const selectedSection = document.getElementById(sectionId);
+      if (selectedSection) {
+        selectedSection.style.display = 'block';
+        selectedSection.classList.add('active');
+      }
+      
+      // Add active class to clicked sidebar item
+      const sidebarItems = document.querySelectorAll('.sidebar ul li');
+      for (let i = 0; i < sidebarItems.length; i++) {
+        if (sidebarItems[i].textContent.toLowerCase().includes(sectionId)) {
+          sidebarItems[i].classList.add('active');
+        }
+      }
+    }
     
     // PDF download functions
     function downloadCompanyReport() {

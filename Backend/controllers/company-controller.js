@@ -2,8 +2,19 @@ const bcrypt = require("bcrypt");
 
 const ApplicationModel = require("../models/application-model");
 const CompanyModel = require("../models/company-model");
-const JobModel = require("../models/job-model")
+const JobModel = require("../models/job-model");
+const applicationModel = require("../models/application-model");
+const companyModel = require("../models/company-model");
+const nodemailer = require('nodemailer');
 
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'anazksunil2@gmail.com',  // Replace with your email
+        pass: 'gefd cyst feti eztk'
+    }
+  });
 
 
 //signup
@@ -170,6 +181,99 @@ const deletejob = async(req,res)=>{
     const job = await JobModel.findOneAndDelete({_id:id});
     res.redirect("/company");
 }
+const Invite = async(req,res)=>{
+    try {
+        let id = req.params.id
+        console.log(id,"id..")
+        let applications = await applicationModel.find({_id:id})
+        console.log(applications,"---")
+        let com_id =  applications[0].company_id
+        console.log(com_id,"com_id--------")
+        let userEmail = applications[0].user_mail
+        let company = await companyModel.find({_id:com_id})
+        console.log(company,"company")
+        let CompanyObject = company[0]
+        const mailOptions = {
+            from: 'Job Portal',
+            to: userEmail,
+            subject: "You have a New Interview Invitation ",
+            text: `Hello... You have a New Interview Invitation from ${CompanyObject.name} please contact us for the further procedure HR will contact you shortly`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error("Error sending email:", error);
+                return res.status(500).json({ error: "Failed to send email" });
+            } else {
+                console.log("Email sent:", info.response);
+                res.redirect("/company")
+            }
+        });
+    } catch (error) {
+        console.log(error)
+    }
+}
+const offerLetter= async(req,res)=>{
+    try {
+      let id = req.params.id
+        console.log(id)
+        let applications = await applicationModel.find({_id:id})
+        console.log(applications,"---")
+        let com_id =  applications[0].company_id
+        let {username} = applications[0]
+        console.log(com_id,"com_id--------")
+        let userEmail = applications[0].user_mail
+        let company = await companyModel.find({_id:com_id})
+        console.log(company,"company")
+        let CompanyObject = company[0]
+        const mailOptions = {
+            from: 'Job Portal',
+            to: userEmail,
+            subject: "Offer Letter",
+            text: `Dear ${username},
+        
+        We are pleased to inform you that you have been selected for the position at ${CompanyObject.name}. After reviewing your application and performance, we believe your skills and experience are a great fit for our organization.
+        
+        Please find below the brief details of your offer:
+        
+        Company Name: ${CompanyObject.name}
+        Email: ${CompanyObject.email}
+      
+        
+        A formal offer letter with more detailed terms and conditions will be sent to your email shortly. We are excited to welcome you to our team and look forward to working with you.
+        
+        If you have any questions or need further information, please feel free to contact us.
+        
+        Warm regards,  
+        ${CompanyObject.name}  
+        HR Team`
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error("Error sending email:", error);
+                return res.status(500).json({ error: "Failed to send email" });
+            } else {
+                console.log("Email sent:", info.response);
+                res.redirect("/users/home")
+            }
+        });
+        res.redirect('/company')
+        
+    } catch (error) {
+      console.log(error)
+    }
+  }
+const reports = async(req,res)=>{
+    try {
+        let company = req.session.company
+        console.log(company,"session..")
+        let application = await applicationModel.find({company_id:company._id})
+        console.log(application)
+        res.render('company/reports',{application})
+    } catch (error) {
+        
+    }
+}
 module.exports = {
     getCompanyLogin,
     doCompanyLogin,
@@ -189,5 +293,8 @@ module.exports = {
     rejectApplication,
     updateJob,
     GetupdateJob,
-    deletejob
+    deletejob,
+    Invite,
+    offerLetter,
+    reports
 } 

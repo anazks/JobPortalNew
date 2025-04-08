@@ -111,17 +111,30 @@ const updateUserProfile = async (req, res) => {
 };
 
 const getJobsPage = async (req, res) => {
-  const jobs = await JobModel.find({});
-  //to calculate how many days ago the job was posted
-  jobs.forEach((singleJob) => {
-    // console.log(singleJob.datePosted);
-    const posted = new Date(singleJob.datePosted)
-    const today = new Date();
-    const difference_in_time = today.getTime() - posted.getTime();
-    singleJob.days_ago = Math.floor(difference_in_time / (1000 * 3600 * 24));
-  });
-  res.render("user/job-list", { jobs });
-}
+  try {
+    const allJobs = await JobModel.find({});
+    const appliedJobs = await ApplicationModel.find({}, 'job_id'); // Only fetch job_id field
+
+    const appliedJobIds = new Set(appliedJobs.map(app => app.job_id));
+
+    // Filter out jobs that are not applied to
+    const jobs = allJobs.filter(job => !appliedJobIds.has(job._id.toString()));
+
+    // Add days_ago field
+    jobs.forEach((singleJob) => {
+      const posted = new Date(singleJob.datePosted);
+      const today = new Date();
+      const difference_in_time = today.getTime() - posted.getTime();
+      singleJob.days_ago = Math.floor(difference_in_time / (1000 * 3600 * 24));
+    });
+
+    res.render("user/job-list", { jobs });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+};
+
 const getAllCompanies = (req, res) => {
 };
 
@@ -323,6 +336,7 @@ const updateUser = async (req,res)=>{
     res.redirect("/preAdmin")
   }
 }
+
 module.exports = {
   getHomePage,
   getUserLogin,

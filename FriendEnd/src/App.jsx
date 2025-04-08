@@ -10,7 +10,9 @@ function App() {
   const [largeText,SetlargeText] = useState('');
    const [space,setSpace] = useState('');
    const [highContrast,sethighContrast] = useState('');
+   
   const jobCategories = [
+
     { title: 'Technology', icon: '💻', count: 1243 },
     { title: 'Healthcare', icon: '🏥', count: 857 },
     { title: 'Education', icon: '🎓', count: 639 },
@@ -20,31 +22,54 @@ function App() {
   ];
   
   const featuredJobs = [
-    { title: 'Senior React Developer', company: 'TechCorp', location: 'San Francisco, CA', salary: '$120k - $150k', type: 'Full-time', posted: '2 days ago' },
-    { title: 'Marketing Manager', company: 'Brand Solutions', location: 'New York, NY', salary: '$90k - $110k', type: 'Full-time', posted: '3 days ago' },
-    { title: 'UX Designer', company: 'Creative Studio', location: 'Remote', salary: '$85k - $105k', type: 'Contract', posted: '1 day ago' },
-    { title: 'Data Analyst', company: 'DataInsights', location: 'Chicago, IL', salary: '$75k - $95k', type: 'Full-time', posted: '5 days ago' }
+    { title: 'Senior React Developer', company: 'TechCorp', location: 'Kochi', salary: 'Rs 25000', type: 'Full-time', posted: '2 days ago' },
+    { title: 'Marketing Manager', company: 'Brand Solutions', location: 'Kannur', salary: 'Rs 20000', type: 'Full-time', posted: '3 days ago' },
+    { title: 'UX Designer', company: 'Creative Studio', location: 'Remote', salary: 'Rs 30000', type: 'Contract', posted: '1 day ago' },
+    { title: 'Data Analyst', company: 'DataInsights', location: 'Tamilnadu', salary: 'Rs 35000', type: 'Full-time', posted: '5 days ago' }
   ];
 
   // Initialize speech synthesis when component mounts
   useEffect(() => {
-    let accessibilityFeture = localStorage.getItem("accessibilityPreferences");
-    if (accessibilityFeture) {
-      let data = JSON.parse(accessibilityFeture);
-      if (data.darkMode) {
-        setBgColor('black');
-      }
-      if(data.largeText){
-        SetlargeText('60px');
-      }
-      if(data.lineSpacing){
-        setSpace('50px');
-      }
+    let accessibilityFeature = localStorage.getItem("accessibilityPreferences");
+    if (accessibilityFeature) {
+        let data = JSON.parse(accessibilityFeature);
+        
+        if (data.darkMode) {
+            setBgColor('black');
+        }
+        if (data.largeText) {
+            SetlargeText('20px'); // Adjust font size as needed
+        }
+        if (data.lineSpacing) {
+            setSpace('4em'); // Adjust line spacing
+        }
+        if (data.highContrast) {
+          setBgColor('yellow');
+        }
+        if (data.grayscale) {
+          document.body.style.filter = 'grayscale(100%)';
+          
+        } else {
+          document.body.style.filter = 'none';
+          
+        } 
+        if (data.dyslexiaFont) {
+          document.body.classList.add('dyslexia-font');
+        } else {
+          document.body.classList.remove('dyslexia-font');
+        }
+        if (data.largeCursor) {
+          document.body.classList.add('large-cursor');
+        } else {
+          document.body.classList.remove('large-cursor');
+        }
     }
+
     if ('speechSynthesis' in window) {
-      setSpeechSynthesis(window.speechSynthesis);
+        setSpeechSynthesis(window.speechSynthesis);
     }
-  }, []);
+}, []);
+
 
   // Function to speak text
   const speakText = (text) => {
@@ -73,7 +98,13 @@ function App() {
   };
 
   return (
-    <div className="app">
+    <div className={`app ${highContrast ? 'high-contrast' : ''}`} 
+    style={{
+        backgroundColor: bgColor, 
+        lineHeight: space,
+        fontSize: largeText
+     }}
+    >
       {/* Header */}
       <header className="header">
   <div className="container header-container">
@@ -84,7 +115,7 @@ function App() {
       <a href="http://localhost:4000/login" className="nav-link active" {...createSpeechHandlers("Find Jobs")} style={{fontSize:largeText}}>Find Jobs</a>
       <a href="http://localhost:4000/company/signup" className="nav-link" {...createSpeechHandlers("Companies")} style={{fontSize:largeText}}>Companies</a>
       {/* <a href="#" className="nav-link" {...createSpeechHandlers("Career Resources")}>Career Resources</a> */}
-      <a href="http://localhost:4000/LoginRouter" className="nav-link" {...createSpeechHandlers("Salary Guide")} style={{fontSize:largeText}}>Admin</a>
+      <a href="http://localhost:4000/LoginRouter" className="nav-link" {...createSpeechHandlers("Admin")} style={{ fontSize: largeText,marginRight: '50px' }}>Admin</a>
       
       {/* Accessibility Icon */}
       <button 
@@ -92,13 +123,9 @@ function App() {
         onClick={() => setShowAccessibility(true)}
         {...createSpeechHandlers("Accessibility Options")}
         aria-label="Open Accessibility Options"
+        style={{ fontSize: '40px', padding: '10px 10px', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center',marginRight: 'auto' }}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-          <line x1="9" y1="9" x2="9.01" y2="9"></line>
-          <line x1="15" y1="9" x2="15.01" y2="9"></line>
-        </svg>
+        <span style={{ fontSize: '100%' }}>♿</span>
       </button>
     </nav>
   </div>

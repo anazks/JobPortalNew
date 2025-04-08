@@ -32,60 +32,25 @@ function Accessibility() {
   // Save preferences to localStorage
   const savePreferences = () => {
     localStorage.setItem('accessibilityPreferences', JSON.stringify(preferences));
-    applyPreferences(preferences);
-    setShowAccessibilityMenu(false);
+    applyPreferences(preferences); // Apply preferences instantly
+    setShowAccessibilityMenu(false); // Close the menu
+  
+    // Refresh the page after a short delay
+    setTimeout(() => {
+      window.location.reload();
+    }, 300); 
   };
 
   // Apply selected preferences to the document
   const applyPreferences = (prefs) => {
-    // Apply text size
-    if (prefs.largeText) {
-      document.body.classList.add('large-text');
-    } else {
-      document.body.classList.remove('large-text');
-    }
+    console.log("Applying Preferences:", prefs); // Debugging log
 
-    // Apply high contrast
-    if (prefs.highContrast) {
-      document.body.classList.add('high-contrast');
-    } else {
-      document.body.classList.remove('high-contrast');
-    }
-
-    // Apply grayscale
-    if (prefs.grayscale) {
-      document.body.classList.add('grayscale');
-    } else {
-      document.body.classList.remove('grayscale');
-    }
-
-    // Apply dark mode
-    if (prefs.darkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
-
-    // Apply cursor enlarge
-    if (prefs.cursorEnlarge) {
-      document.body.classList.add('large-cursor');
-    } else {
-      document.body.classList.remove('large-cursor');
-    }
-
-    // Apply dyslexia-friendly font
-    if (prefs.dyslexiaFont) {
-      document.body.classList.add('dyslexia-font');
-    } else {
-      document.body.classList.remove('dyslexia-font');
-    }
-
-    // Apply increased line spacing
-    if (prefs.lineSpacing) {
-      document.body.classList.add('increased-spacing');
-    } else {
-      document.body.classList.remove('increased-spacing');
-    }
+    document.body.classList.toggle('large-text', prefs.largeText);
+    document.body.classList.toggle('high-contrast', prefs.highContrast);
+    document.body.classList.toggle('dark-mode', prefs.darkMode);
+    document.body.classList.toggle('large-cursor', prefs.cursorEnlarge);
+    document.body.classList.toggle('dyslexia-font', prefs.dyslexiaFont);
+    document.body.classList.toggle('increased-spacing', prefs.lineSpacing);
 
     // Setup text-to-speech if enabled
     if (prefs.textToSpeech) {
@@ -282,6 +247,10 @@ function Accessibility() {
           gap: 8px;
           cursor: pointer;
           z-index: 9999;
+          position: fixed !important;
+          bottom: 20px !important;
+          right: 20px !important;
+          z-index: 99999 !important;
           box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
@@ -353,6 +322,11 @@ function Accessibility() {
 
         :global(.grayscale) {
           filter: grayscale(100%) !important;
+          position: fixed !important;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
         }
 
         :global(.dark-mode) {

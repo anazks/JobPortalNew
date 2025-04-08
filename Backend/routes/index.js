@@ -49,4 +49,5 @@ router.route('/update-Company').post(updateCompanyForm);
 
 router.route('/UpdateUser/:id').get(getUserUpdatePage)
 router.route('/update-user').post(updateUser)
+// router.report('/offerLetter/:id').get(offerLetter)
 module.exports = router;
