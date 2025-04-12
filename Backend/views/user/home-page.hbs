@@ -814,6 +814,77 @@
         </div>
     </footer><!-- #footer -->
 
+
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+  // Function to get cookie value
+  function getCookieValue(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+  
+  // Get the accessibility container
+  const accessibilityContainer = document.getElementById('accessibility-container');
+  
+  // Read the cookie
+  const raw = getCookieValue('accessibilityPreferences');
+  
+  if (raw) {
+    try {
+      const urlDecoded = decodeURIComponent(raw);
+      console.log('URL Decoded:', urlDecoded);
+      
+      // Try parsing as JSON
+      try {
+        const preferences = JSON.parse(urlDecoded);
+        console.log('Parsed JSON:', preferences);
+        
+        // Apply classes based on preferences
+        if (preferences.darkMode === true) {
+          accessibilityContainer.classList.add('dark-mode');
+        }
+        
+        if (preferences.lineSpacing === true) {
+          accessibilityContainer.classList.add('line-spacing');
+        }
+        
+        if (preferences.dyslexiaFont === true) {
+          accessibilityContainer.classList.add('dyslexia-font');
+        }
+        
+        if (preferences.grayscale === true) {
+          accessibilityContainer.classList.add('grayscale');
+        }
+        
+        if (preferences.highContrast === true) {
+          accessibilityContainer.classList.add('high-contrast');
+        }
+        
+        if (preferences.largeText === true) {
+          accessibilityContainer.classList.add('large-text');
+        }
+        
+        if (preferences.cursorEnlarge === true) {
+          accessibilityContainer.classList.add('cursor-enlarge');
+        }
+        
+        if (preferences.textToSpeech === true) {
+          accessibilityContainer.classList.add('text-to-speech');
+        }
+        
+      } catch (jsonErr) {
+        console.log('Not JSON:', jsonErr);
+      }
+    } catch (e) {
+      console.log('URL decode error:', e);
+    }
+  }
+});
+</script>
+
+
+
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 
     <!-- JavaScript Libraries -->

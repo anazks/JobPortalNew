@@ -16,30 +16,89 @@ function Accessibility() {
 
   // Check for saved preferences on component mount
   useEffect(() => {
+    // Check localStorage first
     const savedPrefs = localStorage.getItem('accessibilityPreferences');
     
     if (savedPrefs) {
-      setPreferences(JSON.parse(savedPrefs));
-      applyPreferences(JSON.parse(savedPrefs));
+      const parsedPrefs = JSON.parse(savedPrefs);
+      setPreferences(parsedPrefs);
+      applyPreferences(parsedPrefs);
+      
+      // Also save to cookies
+      savePreferencesToCookies(parsedPrefs);
     } else {
-      // Show accessibility menu on first visit
-      setTimeout(() => {
-        setShowAccessibilityMenu(true);
-      }, 1500);
+      // Check cookies as fallback
+      const cookiePrefs = getPreferencesFromCookies();
+      
+      if (cookiePrefs) {
+        setPreferences(cookiePrefs);
+        applyPreferences(cookiePrefs);
+        
+        // Sync to localStorage
+        localStorage.setItem('accessibilityPreferences', JSON.stringify(cookiePrefs));
+      } else {
+        // Show accessibility menu on first visit
+        setTimeout(() => {
+          setShowAccessibilityMenu(true);
+        }, 1500);
+      }
     }
   }, []);
+  
+  // Helper function to save preferences to cookies
+  const savePreferencesToCookies = (prefs) => {
+    // Set expiration to 1 year from now
+    const expirationDate = new Date();
+    expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+    
+    // Convert preferences object to JSON string
+    const prefsString = JSON.stringify(prefs);
+    
+    // Set the cookie with the preferences data
+    document.cookie = `accessibilityPreferences=${encodeURIComponent(prefsString)}; expires=${expirationDate.toUTCString()}; path=/; SameSite=Lax`;
+  };
+  
+  // Helper function to retrieve preferences from cookies
+  const getPreferencesFromCookies = () => {
+    const cookies = document.cookie.split(';');
+    
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      
+      if (cookie.startsWith('accessibilityPreferences=')) {
+        const prefString = decodeURIComponent(cookie.substring('accessibilityPreferences='.length));
+        try {
+          return JSON.parse(prefString);
+        } catch (e) {
+          console.error('Failed to parse preferences from cookie', e);
+          return null;
+        }
+      }
+    }
+    
+    return null;
+  };
 
   // Save preferences to localStorage
   const savePreferences = () => {
+    // Save to localStorage
     localStorage.setItem('accessibilityPreferences', JSON.stringify(preferences));
-    applyPreferences(preferences); // Apply preferences instantly
-    setShowAccessibilityMenu(false); // Close the menu
-  
+    
+    // Save to cookies
+    savePreferencesToCookies(preferences);
+    
+    // Apply preferences instantly
+    applyPreferences(preferences);
+    
+    // Close the menu
+    setShowAccessibilityMenu(false);
+    
     // Refresh the page after a short delay
     setTimeout(() => {
       window.location.reload();
-    }, 300); 
+    }, 300);
   };
+  
 
   // Apply selected preferences to the document
   const applyPreferences = (prefs) => {

@@ -65,11 +65,111 @@
         .speaking {
             background-color: #f8f9fa;
         }
+        /* Accessibility Classes */
+.dark-mode {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.line-spacing {
+  line-height: 1.8;
+}
+
+.cursor-enlarge * {
+  cursor: pointer;
+}
+
+.dyslexia-font {
+  font-family: "Open Dyslexic", "Comic Sans MS", sans-serif;
+}
+
+.large-text {
+  font-size: 1.25rem;
+}
+
+.grayscale {
+  filter: grayscale(100%);
+}
+
+.high-contrast {
+  filter: contrast(150%);
+}
+
+.text-to-speech:focus,
+.text-to-speech:hover {
+  outline: 2px solid blue; /* Visual indicator that element can be read */
+}
     </style>
 </head>
 
 <body style="background: linear-gradient(to right, #DAD299, #B0DAB9);">
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+  // Function to get cookie value
+  function getCookieValue(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+  
+  // Get the accessibility container
+  const accessibilityContainer = document.getElementById('accessibility-container');
+  
+  // Read the cookie
+  const raw = getCookieValue('accessibilityPreferences');
+  
+  if (raw) {
+    try {
+      const urlDecoded = decodeURIComponent(raw);
+      console.log('URL Decoded:', urlDecoded);
+      
+      // Try parsing as JSON
+      try {
+        const preferences = JSON.parse(urlDecoded);
+        console.log('Parsed JSON:', preferences);
+        
+        // Apply classes based on preferences
+        if (preferences.darkMode === true) {
+          accessibilityContainer.classList.add('dark-mode');
+        }
+        
+        if (preferences.lineSpacing === true) {
+          accessibilityContainer.classList.add('line-spacing');
+        }
+        
+        if (preferences.dyslexiaFont === true) {
+          accessibilityContainer.classList.add('dyslexia-font');
+        }
+        
+        if (preferences.grayscale === true) {
+          accessibilityContainer.classList.add('grayscale');
+        }
+        
+        if (preferences.highContrast === true) {
+          accessibilityContainer.classList.add('high-contrast');
+        }
+        
+        if (preferences.largeText === true) {
+          accessibilityContainer.classList.add('large-text');
+        }
+        
+        if (preferences.cursorEnlarge === true) {
+          accessibilityContainer.classList.add('cursor-enlarge');
+        }
+        
+        if (preferences.textToSpeech === true) {
+          accessibilityContainer.classList.add('text-to-speech');
+        }
+        
+      } catch (jsonErr) {
+        console.log('Not JSON:', jsonErr);
+      }
+    } catch (e) {
+      console.log('URL decode error:', e);
+    }
+  }
+});
+</script>
     <!--==========================
     Header
   ============================-->
@@ -96,7 +196,7 @@
         </div>
     </header><!-- #header -->
 
-    <section id="internship" style="margin-top: 14vh;">
+    <section id="internship accessibility-container"  style="margin-top: 14vh;">
         <div class="container">
             <h2 class="heading pt-3" id="know-more">
                 OUR ON GOING PROGRAMS
