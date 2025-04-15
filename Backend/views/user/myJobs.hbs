@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <title>My Applied Jobs - Online Job Portal</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+    <meta content="job portal, applied jobs, job applications" name="keywords">
+    <meta content="View your applied jobs and application status" name="description">
 
     <!-- Favicons -->
     <link href="/images/favicon.png" rel="icon">
@@ -15,6 +15,8 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700"
         rel="stylesheet">
+    <!-- Dyslexia Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=OpenDyslexic&display=swap">
 
     <!-- Bootstrap CSS File -->
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,84 +31,345 @@
     <!-- Main Stylesheet File -->
     <link href="/stylesheets/style.css" rel="stylesheet">
 
+    <style>
+        /* Accessibility Styles */
+        .dark-mode {
+            background-color: #222 !important;
+            color: #eee !important;
+        }
+
+        .dark-mode .card,
+        .dark-mode .footer,
+        .dark-mode #header {
+            background-color: #333 !important;
+            color: #eee !important;
+        }
+
+        .dark-mode input,
+        .dark-mode select,
+        .dark-mode textarea {
+            background-color: #444 !important;
+            color: #fff !important;
+            border-color: #555 !important;
+        }
+
+        .large-text {
+            font-size: 1.25em !important;
+        }
+
+        .large-text h1, 
+        .large-text h2, 
+        .large-text h3, 
+        .large-text h4 {
+            font-size: 1.5em !important;
+        }
+
+        .dyslexia-font {
+            font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+            line-height: 1.6 !important;
+        }
+
+        .high-contrast {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+
+        .high-contrast a,
+        .high-contrast h1,
+        .high-contrast h2,
+        .high-contrast h3,
+        .high-contrast h4 {
+            color: #ff0 !important;
+        }
+
+        .high-contrast button,
+        .high-contrast .btn {
+            background-color: #ff0 !important;
+            color: #000 !important;
+            border: 2px solid #fff !important;
+        }
+
+        .grayscale {
+            filter: grayscale(100%) !important;
+        }
+
+        .line-spacing {
+            line-height: 2 !important;
+        }
+
+        .line-spacing p {
+            margin-bottom: 1.5em !important;
+        }
+
+        /* Job Card Styles */
+        .job-card {
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .status-applied {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .status-selected {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .status-rejected {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        /* Header Styles */
+        #header {
+            background: #000;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Main Content */
+        #applied-jobs {
+            margin-top: 14vh;
+            min-height: 70vh;
+            padding: 20px 0;
+        }
+
+        /* Search Form */
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-form input {
+            margin-right: 10px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+        }
+
+        /* Focus styles */
+        a:focus, button:focus, input:focus {
+            outline: 2px solid #4CAF50;
+            outline-offset: 2px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .job-card .row {
+                flex-direction: column;
+            }
+            
+            .search-form {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-form input {
+                margin-bottom: 10px;
+                margin-right: 0;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <script>
+        // Apply accessibility preferences from cookies
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to get cookie value
+            function getCookieValue(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
 
-    <!--==========================
-    Header
-  ============================-->
-    <header id="header" style="background: #000;">
+            // Read the cookie
+            const raw = getCookieValue('accessibilityPreferences');
+            let preferences = {};
+
+            if (raw) {
+                try {
+                    const urlDecoded = decodeURIComponent(raw);
+                    try {
+                        preferences = JSON.parse(urlDecoded);
+                        console.log('Accessibility preferences loaded:', preferences);
+                    } catch (e) {
+                        console.log('Error parsing preferences:', e);
+                    }
+                } catch (e) {
+                    console.log('Error decoding preferences:', e);
+                }
+            }
+
+            // Apply accessibility preferences
+            applyAccessibilityPreferences(preferences);
+
+            // Function to apply all preferences
+            function applyAccessibilityPreferences(prefs) {
+                if (!prefs) return;
+
+                const body = document.body;
+                
+                // Dark Mode
+                if (prefs.darkMode) {
+                    body.classList.add('dark-mode');
+                    console.log('Dark mode applied');
+                }
+                
+                // Large Text
+                if (prefs.largeText) {
+                    body.classList.add('large-text');
+                    console.log('Large text applied');
+                }
+                
+                // Dyslexia Font
+                if (prefs.dyslexiaFont) {
+                    body.classList.add('dyslexia-font');
+                    console.log('Dyslexia font applied');
+                }
+                
+                // High Contrast
+                if (prefs.highContrast) {
+                    body.classList.add('high-contrast');
+                    console.log('High contrast applied');
+                }
+                
+                // Grayscale
+                if (prefs.grayscale) {
+                    body.classList.add('grayscale');
+                    console.log('Grayscale applied');
+                }
+                
+                // Line Spacing
+                if (prefs.lineSpacing) {
+                    body.classList.add('line-spacing');
+                    console.log('Line spacing applied');
+                }
+                
+                // Text-to-Speech
+                if (prefs.textToSpeech) {
+                    console.log('Text-to-speech enabled');
+                    setupTextToSpeech();
+                }
+            }
+
+            // Text-to-speech functionality
+            function setupTextToSpeech() {
+                const speakElements = document.querySelectorAll('[data-speak]');
+                
+                speakElements.forEach(element => {
+                    element.addEventListener('mouseenter', function() {
+                        const text = this.getAttribute('data-speak') || this.textContent;
+                        speakText(text);
+                    });
+                    
+                    element.addEventListener('mouseleave', function() {
+                        window.speechSynthesis.cancel();
+                    });
+                    
+                    element.addEventListener('focus', function() {
+                        const text = this.getAttribute('data-speak') || this.textContent;
+                        speakText(text);
+                    });
+                });
+            }
+
+            function speakText(text) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    speechSynthesis.speak(utterance);
+                }
+            }
+        });
+    </script>
+
+    <!-- Header Section -->
+    <header id="header">
         <div class="container-fluid">
-
             <div id="logo" class="pull-left">
-                <h1><a href="#intro" class="scrollto">JobPortal</a></h1>
-                <!-- Uncomment below if you prefer to use an image logo -->
-                <!-- <a href="#intro"><img src="/images/logo.png" alt="" title="" /></a>-->
+                <h1><a href="/" class="scrollto" data-speak="Job Portal Home">JobPortal</a></h1>
             </div>
 
             <nav id="nav-menu-container">
                 <ul class="nav-menu">
-                    <li><a href="/" style="margin:10px;">Home</a></li>
+                    <li><a href="/" style="margin:10px;" data-speak="Home">Home</a></li>
                     <li>
-                        <form action="/search-jobs">
-                            <input type="search" name="search" placeholder="Search Jobs">
-                            <button type="submit" class="btn btn-success p-1">Search</button>
+                        <form class="search-form" action="/search-jobs">
+                            <input type="search" name="search" placeholder="Search Jobs" aria-label="Search jobs">
+                            <button type="submit" class="btn btn-success p-1" data-speak="Search">Search</button>
                         </form>
                     </li>
                 </ul>
-            </nav><!-- #nav-menu-container -->
+            </nav>
         </div>
-    </header><!-- #header -->
+    </header>
 
-    <section id="applied-jobs" style="margin-top: 14vh;min-height:70vh">
+    <!-- Main Content Section -->
+    <section id="applied-jobs">
         <div class="container">
             {{#if data}}
-            <h2 class="heading" id="know-more">My Applied Jobs</h2>
+            <h2 class="heading" id="know-more" data-speak="My Applied Jobs">My Applied Jobs</h2>
             <div class="row">
                 {{#each data}}
                 <div class="col-sm-12">
-                    <div class="card mb-3">
+                    <div class="card job-card">
                         <div class="row g-0 align-items-center">
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title" style="font-weight: 600;">{{job.title}}</h5>
-                                    <p class="card-text">{{application.description}}</p>
-                                    <p class="card-text"><strong>Salary:</strong> ₹{{job.salary}}</p>
-                                    <p class="card-text"><strong>company Name:</strong> <strong style="color: rgb(20, 78, 249);">{{job.company_name}}</strong> </p>
-
-                                    {{!-- {{!-- <p class="card-text"><strong>Company:</strong> {{job.company_name}}</p> --}}
-                                    {{!-- <p class="card-text"><strong>Salary:</strong> ₹{{job.salary}}</p> --}}
-                                    <p class="card-text"><strong>Status:</strong><span style="color: green;"> {{application.status}} </span></p>
-                                    {{!-- <p class="card-text"><strong>Location:</strong> {{job.area}}</p>
-                                    <p class="card-text"><small class="text-muted">Application Date: {{application.applyDate}}</small></p>
-                                    <p class="card-text"><small class="text-muted">Status: <span class="badge bg-{{#if (eq application.status 'applied')}}primary{{else if (eq application.status 'selected')}}success{{else if (eq application.status 'rejected')}}danger{{else}}secondary{{/if}}">{{application.status}}</span></small></p> --}}
+                                    <h5 class="card-title" style="font-weight: 600;" data-speak="Job title {{job.title}}">{{job.title}}</h5>
+                                    <p class="card-text" data-speak="Application description {{application.description}}">{{application.description}}</p>
+                                    <p class="card-text" data-speak="Salary {{job.salary}}"><strong>Salary:</strong> ₹{{job.salary}}</p>
+                                    <p class="card-text" data-speak="Company name {{job.company_name}}"><strong>Company Name:</strong> <strong style="color: rgb(20, 78, 249);">{{job.company_name}}</strong></p>
+                                    <p class="card-text">
+                                        <strong>Status:</strong> 
+                                        <span class="status-badge status-{{application.status}}" data-speak="Status {{application.status}}">
+                                            {{application.status}}
+                                        </span>
+                                    </p>
+                                    <p class="card-text"><small class="text-muted">Applied on: {{application.applyDate}}</small></p>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="card-body">
-                                    {{!-- <p class="card-text justify-content-space-around">
-                                        <a href="/job-details/{{job._id}}" class="btn btn-outline-primary ms-5 mb-4">View Details</a> <br>
-                                        <a href="/withdraw-application/{{application._id}}" class="btn btn-outline-danger ms-5">Withdraw Application</a>
-                                    </p> --}}
+                            {{!-- <div class="col-md-4">
+                                <div class="card-body text-center">
+                                    <a href="/job-details/{{job._id}}" class="btn btn-outline-primary mb-3" data-speak="View job details">View Details</a>
+                                    <a href="/withdraw-application/{{application._id}}" class="btn btn-outline-danger" data-speak="Withdraw application">Withdraw</a>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
                 {{/each}}
             </div>
             {{else}}
-            <h2 class="heading text-center pt-5" id="know-more">You haven't applied to any jobs yet <br>
-                <a href="/jobs" class="btn btn-outline-primary mt-5">Browse Jobs Now</a>
-            </h2>
+            <div class="text-center pt-5">
+                <h2 class="heading" id="know-more" data-speak="You haven't applied to any jobs yet">You haven't applied to any jobs yet</h2>
+                <a href="/jobs" class="btn btn-outline-primary mt-5" data-speak="Browse jobs now">Browse Jobs Now</a>
+            </div>
             {{/if}}
         </div>
     </section>
 
-    <!--==========================
-    Footer
-  ============================-->
+    <!-- Footer Section -->
     <footer id="footer">
         <div class="container">
             <div class="copyright">
@@ -116,7 +379,7 @@
                 Designed by Us
             </div>
         </div>
-    </footer><!-- #footer -->
+    </footer>
 
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 
@@ -134,12 +397,9 @@
     <script src="/lib/isotope/isotope.pkgd.min.js"></script>
     <script src="/lib/lightbox/js/lightbox.min.js"></script>
     <script src="/lib/touchSwipe/jquery.touchSwipe.min.js"></script>
-    <!-- Contact Form JavaScript File -->
-    <script src="contactform/contactform.js"></script>
 
     <!-- Template Main Javascript File -->
     <script src="/javascripts/main.js"></script>
 
 </body>
-
 </html>

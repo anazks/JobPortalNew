@@ -13,8 +13,9 @@
     <link href="/images/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
+    <!-- Dyslexia Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=OpenDyslexic&display=swap">
 
     <!-- Bootstrap CSS File -->
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -32,6 +33,7 @@
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
+            transition: all 0.3s ease;
         }
 
         * {
@@ -151,7 +153,6 @@
 
         /* Change styles for cancel button and signup button on extra small screens */
         @media screen and (max-width: 300px) {
-
             .cancelbtn,
             .signupbtn {
                 width: 100%;
@@ -164,122 +165,92 @@
             left: 2%;
             width: 96%;
         }
-        p:hover, h2:hover, a:hover, button:hover {
-                font-size: 1.2em; /* Increases text size on hover */
-                transition: font-size 0.3s ease-in-out; /* Smooth transition */
-            }
-
-    </style>
-
-</head>
-
-<body>
-    <script>
-         function speakText(text) {
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';
-        speechSynthesis.speak(utterance);
-      } else {
-        alert('Your browser does not support text-to-speech.');
-      }
-    }
-    </script>
-
-    <!--==========================
-    Header
-  ============================-->
-  <header id="header">
-    <div class="container-fluid">
-        <div id="logo" class="pull-left">
-            <h1><a href="#intro" class="scrollto" tabindex="0" accesskey="0">JOB PORTAL</a></h1>
-            <!-- Uncomment below if you prefer to use an image logo -->
-            <!-- <a href="#intro"><img src="/images/logo.png" alt="" title="" /></a>-->
-        </div>
-
-        <nav id="nav-menu-container">
-            <ul class="nav-menu">
-                <li class="menu-active"><a href="#intro" tabindex="1" accesskey="1">Home</a></li>
-                {{#if user}}
-                <li class="menu-has-children"><a href="/profile" tabindex="3" accesskey="3">{{user.name}}</a>
-                  <ul>
-                        <li><a href="/profile" tabindex="4" accesskey="4"><button style="width:100%;">Your Profile</button></a>
-                        </li><br>
-                        <li><a href="/logout" tabindex="5" accesskey="5"><button style="width:100%;">Logout</button></a></li><br>
-                    </ul>
-                <li><a href="/getMyJobs" tabindex="2" accesskey="2">My Jobs</a></li>
-
-                
-                </li>
-                {{else}}
-                <li><a href="/login" tabindex="3" accesskey="3">Login</a></li>
-                <li><a href="/company" tabindex="2" accesskey="2">Companies</a></li>
-
-                <li><a href="/signup" tabindex="4" accesskey="4">Signup</a></li>
-                <li class="menu-has-children"><a href="#" tabindex="5" accesskey="5">For Employers</a>
-                    <ul>
-                        <li><a href="/company/login" tabindex="6" accesskey="6"><button style="width:100%;">Login</button></a></li><br>
-                        <li><a href="/company/signup" tabindex="7" accesskey="7"><button style="width:100%;">Sign Up</button></a></li>
-                    </ul>
-                </li>
-                {{/if}}
-                <li><a href="#contact" tabindex="8" accesskey="8">Contact</a></li>
-            </ul>
-        </nav><!-- #nav-menu-container -->
         
-        <div class="keyboard-shortcuts-info">
-            <button id="show-shortcuts" class="btn btn-sm btn-outline-light" title="Show Keyboard Shortcuts" aria-label="Show Keyboard Shortcuts">
-                <i class="fa fa-keyboard-o"></i>
-            </button>
-        </div>
-    </div>
-    
-    <!-- Keyboard Shortcuts Modal -->
-    <div id="shortcuts-modal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Keyboard Shortcuts</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Key</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Alt + 0</td><td>Go to Job Portal Home</td></tr>
-                            <tr><td>Alt + 1</td><td>Home</td></tr>
-                            <tr><td>Alt + 2</td><td>Companies</td></tr>
-                            {{#if user}}
-                            <tr><td>Alt + 3</td><td>User Menu</td></tr>
-                            <tr><td>Alt + 4</td><td>Your Profile</td></tr>
-                            <tr><td>Alt + 5</td><td>Logout</td></tr>
-                            {{else}}
-                            <tr><td>Alt + 3</td><td>Login</td></tr>
-                            <tr><td>Alt + 4</td><td>Signup</td></tr>
-                            <tr><td>Alt + 5</td><td>For Employers Menu</td></tr>
-                            <tr><td>Alt + 6</td><td>Employer Login</td></tr>
-                            <tr><td>Alt + 7</td><td>Employer Sign Up</td></tr>
-                            {{/if}}
-                            <tr><td>Alt + 8</td><td>Contact</td></tr>
-                            <tr><td>?</td><td>Show this help</td></tr>
-                            <tr><td>Esc</td><td>Close menus/modal</td></tr>
-                            <tr><td>Tab</td><td>Navigate through elements</td></tr>
-                            <tr><td>Enter</td><td>Select/activate focused element</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <style>
+        p:hover, h2:hover, a:hover, button:hover {
+            font-size: 1.2em;
+            transition: font-size 0.3s ease-in-out;
+        }
+
+        /* Accessibility Styles */
+        .dark-mode {
+            background-color: #222 !important;
+            color: #eee !important;
+        }
+
+        .dark-mode .modal-content,
+        .dark-mode .footer-top,
+        .dark-mode #header,
+        .dark-mode .about-col,
+        .dark-mode .carousel-content {
+            background-color: #333 !important;
+            color: #eee !important;
+        }
+
+        .dark-mode input,
+        .dark-mode select,
+        .dark-mode textarea {
+            background-color: #444 !important;
+            color: #fff !important;
+            border-color: #555 !important;
+        }
+
+        .large-text {
+            font-size: 1.25em !important;
+        }
+
+        .large-text h1, 
+        .large-text h2, 
+        .large-text h3, 
+        .large-text h4 {
+            font-size: 1.5em !important;
+        }
+
+        .dyslexia-font {
+            font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+            line-height: 1.6 !important;
+        }
+
+        .high-contrast {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+
+        .high-contrast a,
+        .high-contrast h1,
+        .high-contrast h2,
+        .high-contrast h3,
+        .high-contrast h4 {
+            color: #ff0 !important;
+        }
+
+        .high-contrast button,
+        .high-contrast .btn-get-started {
+            background-color: #ff0 !important;
+            color: #000 !important;
+            border: 2px solid #fff !important;
+        }
+
+        .grayscale {
+            filter: grayscale(100%) !important;
+        }
+
+        .line-spacing {
+            line-height: 2 !important;
+        }
+
+        .line-spacing p {
+            margin-bottom: 1.5em !important;
+        }
+
+        /* Large cursor */
+        :root {
+            --cursor-size: 10px;
+        }
+
+        .cursor-enlarge * {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="%root%" height="%root%" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="rgba(255,255,0,0.7)" /></svg>') 50 50, auto;
+        }
+
         /* Keyboard navigation styles */
         .keyboard-shortcuts-info {
             position: absolute;
@@ -302,11 +273,167 @@
         .menu-has-children.keyboard-active > ul {
             display: block !important;
         }
+
+        /* Zoomable text styles */
+        .zoomable-text {
+            transition: transform 0.3s ease, font-size 0.3s ease;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .zoomable-text:hover {
+            transform: scale(1.2);
+            font-size: 150%;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 5px;
+            z-index: 100;
+            position: relative;
+        }
+        
+        .accessible-paragraph {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
     </style>
-    
+
+</head>
+
+<body>
     <script>
+        // Main accessibility preferences application
         document.addEventListener('DOMContentLoaded', function() {
-            // Show keyboard shortcuts modal
+            // Function to get cookie value
+            function getCookieValue(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
+
+            // Read the cookie
+            const raw = getCookieValue('accessibilityPreferences');
+            let preferences = {};
+
+            if (raw) {
+                try {
+                    const urlDecoded = decodeURIComponent(raw);
+                    try {
+                        preferences = JSON.parse(urlDecoded);
+                        console.log('Accessibility preferences loaded:', preferences);
+                    } catch (e) {
+                        console.log('Error parsing preferences:', e);
+                    }
+                } catch (e) {
+                    console.log('Error decoding preferences:', e);
+                }
+            }
+
+            // Apply accessibility preferences
+            applyAccessibilityPreferences(preferences);
+
+            // Function to apply all preferences
+            function applyAccessibilityPreferences(prefs) {
+                if (!prefs) return;
+
+                const body = document.body;
+                
+                // Dark Mode
+                if (prefs.darkMode) {
+                    body.classList.add('dark-mode');
+                    console.log('Dark mode applied');
+                }
+                
+                // Large Text
+                if (prefs.largeText) {
+                    body.classList.add('large-text');
+                    console.log('Large text applied');
+                    
+                    // Specific element adjustments
+                    const accButton = document.getElementById('Acc');
+                    if (accButton) {
+                        accButton.style.fontSize = '1.5em';
+                        accButton.style.padding = '20px 30px';
+                    }
+                }
+                
+                // Dyslexia Font
+                if (prefs.dyslexiaFont) {
+                    body.classList.add('dyslexia-font');
+                    console.log('Dyslexia font applied');
+                }
+                
+                // High Contrast
+                if (prefs.highContrast) {
+                    body.classList.add('high-contrast');
+                    console.log('High contrast applied');
+                }
+                
+                // Grayscale
+                if (prefs.grayscale) {
+                    body.classList.add('grayscale');
+                    console.log('Grayscale applied');
+                }
+                
+                // Line Spacing
+                if (prefs.lineSpacing) {
+                    body.classList.add('line-spacing');
+                    console.log('Line spacing applied');
+                }
+                
+                // Cursor Enlarge
+                if (prefs.cursorEnlarge) {
+                    body.classList.add('cursor-enlarge');
+                    document.documentElement.style.setProperty('--cursor-size', '20px');
+                    console.log('Large cursor applied');
+                }
+                
+                // Text-to-Speech
+                if (prefs.textToSpeech) {
+                    console.log('Text-to-speech enabled');
+                    // This would be implemented in the speakText functions
+                }
+            }
+
+            // Text-to-speech functionality
+            function speakText(text) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    speechSynthesis.speak(utterance);
+                } else {
+                    alert('Your browser does not support text-to-speech.');
+                }
+            }
+
+            // Set up text-to-speech for about section
+            const speakButton = document.getElementById('speak-button');
+            const textElement = document.getElementById('about-us-text');
+            
+            if (speakButton && textElement) {
+                speakButton.addEventListener('click', function() {
+                    const text = textElement.textContent;
+                    speakText(text);
+                });
+                
+                // Mouse hover functionality
+                const headerSection = document.querySelector('.section-header');
+                
+                if (headerSection) {
+                    headerSection.addEventListener('mouseenter', function() {
+                        if (preferences.textToSpeech) {
+                            const text = textElement.textContent;
+                            speakText(text);
+                        }
+                    });
+                    
+                    headerSection.addEventListener('mouseleave', function() {
+                        window.speechSynthesis.cancel();
+                    });
+                }
+            }
+
+            // Keyboard shortcuts modal
             const showShortcuts = document.getElementById('show-shortcuts');
             const shortcutsModal = document.getElementById('shortcuts-modal');
             
@@ -416,17 +543,123 @@
             document.addEventListener('mousedown', function() {
                 usingKeyboard = false;
             });
+
+            // Apply zoomable text to about section
+            function makeTextZoomable() {
+                const paragraphs = document.querySelectorAll('#about p');
+                
+                paragraphs.forEach(paragraph => {
+                    paragraph.classList.add('accessible-paragraph');
+                    const text = paragraph.textContent;
+                    paragraph.textContent = '';
+                    
+                    text.split(' ').forEach((word, index, array) => {
+                        const span = document.createElement('span');
+                        span.classList.add('zoomable-text');
+                        span.textContent = word + (index < array.length - 1 ? ' ' : '');
+                        paragraph.appendChild(span);
+                    });
+                });
+            }
+            
+            makeTextZoomable();
         });
     </script>
-</header><!-- #header -->
 
-    <!-- alerts -->
+    <!--==========================
+    Header
+    ============================-->
+    <header id="header">
+        <div class="container-fluid">
+            <div id="logo" class="pull-left">
+                <h1><a href="#intro" class="scrollto" tabindex="0" accesskey="0">JOB PORTAL</a></h1>
+            </div>
+
+            <nav id="nav-menu-container">
+                <ul class="nav-menu">
+                    <li class="menu-active"><a href="#intro" tabindex="1" accesskey="1">Home</a></li>
+                    {{#if user}}
+                    <li class="menu-has-children"><a href="/profile" tabindex="3" accesskey="3">{{user.name}}</a>
+                        <ul>
+                            <li><a href="/profile" tabindex="4" accesskey="4"><button style="width:100%;">Your Profile</button></a>
+                            </li><br>
+                            <li><a href="/logout" tabindex="5" accesskey="5"><button style="width:100%;">Logout</button></a></li><br>
+                        </ul>
+                    <li><a href="/getMyJobs" tabindex="2" accesskey="2">My Jobs</a></li>
+                    {{else}}
+                    <li><a href="/login" tabindex="3" accesskey="3">Login</a></li>
+                    <li><a href="/company" tabindex="2" accesskey="2">Companies</a></li>
+                    <li><a href="/signup" tabindex="4" accesskey="4">Signup</a></li>
+                    <li class="menu-has-children"><a href="#" tabindex="5" accesskey="5">For Employers</a>
+                        <ul>
+                            <li><a href="/company/login" tabindex="6" accesskey="6"><button style="width:100%;">Login</button></a></li><br>
+                            <li><a href="/company/signup" tabindex="7" accesskey="7"><button style="width:100%;">Sign Up</button></a></li>
+                        </ul>
+                    </li>
+                    {{/if}}
+                    <li><a href="#contact" tabindex="8" accesskey="8">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <div class="keyboard-shortcuts-info">
+                <button id="show-shortcuts" class="btn btn-sm btn-outline-light" title="Show Keyboard Shortcuts" aria-label="Show Keyboard Shortcuts">
+                    <i class="fa fa-keyboard-o"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Keyboard Shortcuts Modal -->
+        <div id="shortcuts-modal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Keyboard Shortcuts</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Alt + 0</td><td>Go to Job Portal Home</td></tr>
+                                <tr><td>Alt + 1</td><td>Home</td></tr>
+                                <tr><td>Alt + 2</td><td>Companies</td></tr>
+                                {{#if user}}
+                                <tr><td>Alt + 3</td><td>User Menu</td></tr>
+                                <tr><td>Alt + 4</td><td>Your Profile</td></tr>
+                                <tr><td>Alt + 5</td><td>Logout</td></tr>
+                                {{else}}
+                                <tr><td>Alt + 3</td><td>Login</td></tr>
+                                <tr><td>Alt + 4</td><td>Signup</td></tr>
+                                <tr><td>Alt + 5</td><td>For Employers Menu</td></tr>
+                                <tr><td>Alt + 6</td><td>Employer Login</td></tr>
+                                <tr><td>Alt + 7</td><td>Employer Sign Up</td></tr>
+                                {{/if}}
+                                <tr><td>Alt + 8</td><td>Contact</td></tr>
+                                <tr><td>?</td><td>Show this help</td></tr>
+                                <tr><td>Esc</td><td>Close menus/modal</td></tr>
+                                <tr><td>Tab</td><td>Navigate through elements</td></tr>
+                                <tr><td>Enter</td><td>Select/activate focused element</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header><!-- #header -->
+
     <!--==========================
     Intro Section
-  ============================-->
+    ============================-->
     <section id="intro">
         <div class="intro-container">
-            <div id="introCarousel" class="carousel  slide carousel-fade" data-ride="carousel">
+            <div id="introCarousel" class="carousel slide carousel-fade" data-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         {{#if alertMessage}}
@@ -437,188 +670,32 @@
                         <div class="carousel-background"><img src="/images/intro-carousel/2.jpg" alt=""></div>
                         <div class="carousel-container">
                             <div class="carousel-content">
-                               
                                 {{#if user}}
-                                <a href="/user-jobs" class="btn-get-started scrollto">Find Jobs Now</a>
+                                <a href="/user-jobs" class="btn-get-started scrollto" id="Acc">Find Jobs Now</a>
                                 {{else}}
                                 <a href="/signup" class="btn-get-started scrollto">Get Started</a>
                                 {{/if}}
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </section><!-- #intro -->
-<button onclick="openInIframe()" onmouseenter="speakButtonText(this)" onmouseleave="stopSpeaking()">Open Resume Builder</button>
-
-<script>
-  function speakButtonText(element) {
-    const text = element.textContent;
-    const speech = new SpeechSynthesisUtterance(text);
-    
-    // Optional: Configure voice settings
-    speech.rate = 1; // Speed (0.1 to 10)
-    speech.pitch = 1; // Pitch (0 to 2)
-    speech.volume = 1; // Volume (0 to 1)
-    
-    // Speak the text
-    window.speechSynthesis.speak(speech);
-  }
-  
-  function stopSpeaking() {
-    window.speechSynthesis.cancel();
-  }
-</script>
-<div id="iframeContainer" style="margin-top: 10px;"></div>
-
-<script>
-    
-  function openInIframe() {
-    document.getElementById("iframeContainer").innerHTML = `
-      <iframe src="https://e-resume.vercel.app/builder" width="100%" height="600px" style="border: none;"></iframe>
-    `;
-  }
-</script>
-
-
-<!-- Add this CSS to your website's stylesheet or in a <style> tag in the head -->
-<style>
-    /* Base style for zoomable text */
-    .zoomable-text {
-        transition: transform 0.3s ease, font-size 0.3s ease;
-        display: inline-block;
-        cursor: pointer;
-    }
-    
-    /* Zoom effect on hover */
-    .zoomable-text:hover {
-        transform: scale(1.2);
-        font-size: 150%;
-        background-color: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        padding: 5px;
-        z-index: 100;
-        position: relative;
-    }
-    
-    /* Add a class for paragraphs that should be zoomable */
-    .accessible-paragraph {
-        line-height: 1.6;
-        margin-bottom: 15px;
-    }
-</style>
-
-<!-- Add this JavaScript just before the closing </body> tag -->
-<script>
-    // Function to apply zoomable text to all paragraphs in the "about" section
-    function makeTextZoomable() {
-        // Select all paragraphs within the about section
-        const paragraphs = document.querySelectorAll('#about p');
-        
-        paragraphs.forEach(paragraph => {
-            // Add the accessible-paragraph class
-            paragraph.classList.add('accessible-paragraph');
-            
-            // Get the text content
-            const text = paragraph.textContent;
-            
-            // Clear the paragraph
-            paragraph.textContent = '';
-            
-            // Split text into words and wrap each in a span
-            text.split(' ').forEach((word, index, array) => {
-                const span = document.createElement('span');
-                span.classList.add('zoomable-text');
-                span.textContent = word + (index < array.length - 1 ? ' ' : '');
-                paragraph.appendChild(span);
-            });
-        });
-    }
-    
-    // Run the function when the DOM is fully loaded
-    document.addEventListener('DOMContentLoaded', makeTextZoomable);
-    
-    // Alternative approach: make specific sections zoomable
-    function makeSpecificTextZoomable(selector) {
-        const elements = document.querySelectorAll(selector);
-        elements.forEach(element => {
-            // Get the text content
-            const text = element.textContent;
-            
-            // Clear the element
-            element.textContent = '';
-            
-            // Split text into words and wrap each in a span
-            text.split(' ').forEach((word, index, array) => {
-                const span = document.createElement('span');
-                span.classList.add('zoomable-text');
-                span.textContent = word + (index < array.length - 1 ? ' ' : '');
-                element.appendChild(span);
-            });
-        });
-    }
-    
-    // Uncomment the line below if you want to apply zoom to specific elements instead of all paragraphs
-    // document.addEventListener('DOMContentLoaded', () => makeSpecificTextZoomable('#about .section-header p, #about .about-col p'));
-</script>
 
     <main id="main">
-
-
         <!--==========================
-      About Us Section
-    ============================-->
+        About Us Section
+        ============================-->
         <section id="about">
             <div class="container">
-
                 <header class="section-header">
-    <h3>About Us</h3>
-    <p id="about-us-text">We are professional Software Developers, we solve problems with innovative Software ideas. We help companies design, build, launch and support innovative software products across a wide range of industries, and anyone who wishes to become an IT developer can also join with us.</p>
-    <button id="speak-button" aria-label="Listen to text">🔊 Listen</button>
-    
-    <script>
-        let accblity = localStorage.getItem('accblity');
-        document.addEventListener('DOMContentLoaded', function() {
-            const speakButton = document.getElementById('speak-button');
-            const textElement = document.getElementById('about-us-text');
-            
-            speakButton.addEventListener('click', function() {
-                const text = textElement.textContent;
-                const speech = new SpeechSynthesisUtterance(text);
-                
-                // Optional: Configure voice settings
-                speech.rate = 1; // Speed (0.1 to 10)
-                speech.pitch = 1; // Pitch (0 to 2)
-                speech.volume = 1; // Volume (0 to 1)
-                
-                // Speak the text
-                window.speechSynthesis.speak(speech);
-            });
-            
-            // Mouse hover functionality
-            const headerSection = document.querySelector('.section-header');
-            
-            headerSection.addEventListener('mouseenter', function() {
-                const text = textElement.textContent;
-                const speech = new SpeechSynthesisUtterance(text);
-                window.speechSynthesis.speak(speech);
-            });
-            
-            headerSection.addEventListener('mouseleave', function() {
-                window.speechSynthesis.cancel();
-            });
-        });
-    </script>
-</header>
-<script>
-    
-</script>
-                <div class="row about-cols">
+                    <h3>About Us</h3>
+                    <p id="about-us-text">We are professional Software Developers, we solve problems with innovative Software ideas. We help companies design, build, launch and support innovative software products across a wide range of industries, and anyone who wishes to become an IT developer can also join with us.</p>
+                    <button id="speak-button" aria-label="Listen to text">🔊 Listen</button>
+                </header>
 
+                <div class="row about-cols">
                     <div class="col-md-4 wow fadeInUp">
                         <div class="about-col">
                             <div class="img">
@@ -626,11 +703,7 @@
                                 <div class="icon"><i class="ion-ios-speedometer-outline"></i></div>
                             </div>
                             <h2 class="title"><a href="#">Our Mission</a></h2>
-
-                            <p>
-                              "Our mission is to provide cutting-edge software solutions and top-notch training programs that empower individuals and businesses to thrive in the digital age. We are dedicated to equipping our clients with the knowledge, skills, and tools they need to embrace technology, drive innovation, and achieve sustainable success."
-                            </p>
-
+                            <p>"Our mission is to provide cutting-edge software solutions and top-notch training programs that empower individuals and businesses to thrive in the digital age. We are dedicated to equipping our clients with the knowledge, skills, and tools they need to embrace technology, drive innovation, and achieve sustainable success."</p>
                         </div>
                     </div>
 
@@ -641,9 +714,7 @@
                                 <div class="icon"><i class="ion-ios-list-outline"></i></div>
                             </div>
                             <h2 class="title"><a href="#">Our Plan</a></h2>
-                            <p> internally, we are a bunch of entrepreneurs trying to solve a very hard problem – the
-                                (near)failure of India’s education system.
-                            </p>
+                            <p>Internally, we are a bunch of entrepreneurs trying to solve a very hard problem – the (near)failure of India's education system.</p>
                         </div>
                     </div>
 
@@ -654,24 +725,18 @@
                                 <div class="icon"><i class="ion-ios-eye-outline"></i></div>
                             </div>
                             <h2 class="title"><a href="#">Our Vision</a></h2>
-                            <p>"Empowering individuals and organizations through transformative technology and comprehensive training, bridging the gap between innovation and expertise."
-                            </p>
+                            <p>"Empowering individuals and organizations through transformative technology and comprehensive training, bridging the gap between innovation and expertise."</p>
                         </div>
                     </div>
-
                 </div>
-
             </div>
-        </section>
-        
-        <!-- #about -->
+        </section><!-- #about -->
 
         <!--==========================
-      Clients Section
-    ============================-->
+        Clients Section
+        ============================-->
         <section id="company" class="wow fadeInUp">
             <div class="container">
-
                 <header class="section-header">
                     <h3>Companies</h3>
                 </header>
@@ -684,30 +749,28 @@
                     <img src="/images/clients/amazon-LOGO.jpg" alt="">
                     <img src="/images/clients/cisco.png" alt="">
                 </div>
-
             </div>
         </section><!-- #clients -->
 
-   
+        <!--==========================
+        Contact Section
+        ============================-->
         <section id="contact" class="section-bg wow fadeInUp">
             <div class="container">
-
                 <div class="section-header">
                     <h3>Contact Us</h3>
-                    {{!-- <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p> --}}
                 </div>
 
                 <div class="row contact-info">
-
                     <div class="col-md-4">
                         <div class="contact-address">
                             <i class="ion-ios-location-outline"></i>
                             <h3>Address</h3>
                             <address>
-                                    Beta infotech
-                                    Kannanthodath Road
-                                    2nd Floor Venus Chembers
-                                    kochi,682016
+                                Beta infotech<br>
+                                Kannanthodath Road<br>
+                                2nd Floor Venus Chembers<br>
+                                Kochi, 682016
                             </address>
                         </div>
                     </div>
@@ -716,8 +779,8 @@
                         <div class="contact-phone">
                             <i class="ion-ios-telephone-outline"></i>
                             <h3>Phone Number</h3>
-                            <p><a href="tel:+155895548855">+91 8606414384</a></p>
-                            <p><a href="tel:+155895548855">+91 484335340</a></p>
+                            <p><a href="tel:+918606414384">+91 8606414384</a></p>
+                            <p><a href="tel:+91484335340">+91 484335340</a></p>
                         </div>
                     </div>
 
@@ -725,32 +788,24 @@
                         <div class="contact-email">
                             <i class="ion-ios-email-outline"></i>
                             <h3>Email</h3>
-                            <p><a href="mailto:info@example.com">contact@betainfotech.com</a></p>
+                            <p><a href="mailto:contact@betainfotech.com">contact@betainfotech.com</a></p>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </section><!-- #contact -->
-
     </main>
-
-
-
 
     <!--==========================
     Footer
-  ============================-->
+    ============================-->
     <footer id="footer">
         <div class="footer-top">
             <div class="container">
                 <div class="row">
-
                     <div class="col-lg-3 col-md-6 footer-info">
                         <h3>betaPORTAL</h3>
-                        <!-- <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus. Scelerisque felis imperdiet proin fermentum leo. Amet volutpat consequat mauris nunc congue.</p>-->
-                        <p>Our website is useful for every valueable person for his carrier... </p>
+                        <p>Our website is useful for every valueable person for his carrier...</p>
                     </div>
 
                     <div class="col-lg-3 col-md-6 footer-links">
@@ -767,7 +822,7 @@
                     <div class="col-lg-3 col-md-6 footer-contact">
                         <h4>Contact Us</h4>
                         <p>
-                            Beta infotech Kannanthodath Road 2nd  <br>
+                            Beta infotech Kannanthodath Road 2nd<br>
                             Floor Venus Chembers kochi,682016<br>
                             <strong>Phone:</strong> +91 8606414384<br>
                             <strong>Email:</strong> contact@betainfotech.com<br>
@@ -780,19 +835,15 @@
                             <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
                             <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
                         </div>
-
                     </div>
 
                     <div class="col-lg-3 col-md-6 footer-newsletter">
                         <h4>Our Newsletter</h4>
-                        <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam
-                            illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase
-                            seza.</p>
+                        <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase seza.</p>
                         <form action="" method="post">
                             <input type="email" name="email"><input type="submit" value="Subscribe">
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -802,88 +853,11 @@
                 &copy; Copyright <strong>JobPortal</strong>. All Rights Reserved
             </div>
             <div class="credits">
-                <!--
-          All the links in the footer should remain intact.
-          You can delete the links only if you purchased the pro version.
-          Licensing information: https://bootstrapmade.com/license/
-          Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=JobPortal
-        -->
                 Designed by Us
                 <a href="/company/signup"><button style="width:100%;">thank You!!</button></a>
             </div>
         </div>
     </footer><!-- #footer -->
-
-
-<script>
- document.addEventListener('DOMContentLoaded', function() {
-  // Function to get cookie value
-  function getCookieValue(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-  }
-  
-  // Get the accessibility container
-  const accessibilityContainer = document.getElementById('accessibility-container');
-  
-  // Read the cookie
-  const raw = getCookieValue('accessibilityPreferences');
-  
-  if (raw) {
-    try {
-      const urlDecoded = decodeURIComponent(raw);
-      console.log('URL Decoded:', urlDecoded);
-      
-      // Try parsing as JSON
-      try {
-        const preferences = JSON.parse(urlDecoded);
-        console.log('Parsed JSON:', preferences);
-        
-        // Apply classes based on preferences
-        if (preferences.darkMode === true) {
-          accessibilityContainer.classList.add('dark-mode');
-        }
-        
-        if (preferences.lineSpacing === true) {
-          accessibilityContainer.classList.add('line-spacing');
-        }
-        
-        if (preferences.dyslexiaFont === true) {
-          accessibilityContainer.classList.add('dyslexia-font');
-        }
-        
-        if (preferences.grayscale === true) {
-          accessibilityContainer.classList.add('grayscale');
-        }
-        
-        if (preferences.highContrast === true) {
-          accessibilityContainer.classList.add('high-contrast');
-        }
-        
-        if (preferences.largeText === true) {
-          accessibilityContainer.classList.add('large-text');
-        }
-        
-        if (preferences.cursorEnlarge === true) {
-          accessibilityContainer.classList.add('cursor-enlarge');
-        }
-        
-        if (preferences.textToSpeech === true) {
-          accessibilityContainer.classList.add('text-to-speech');
-        }
-        
-      } catch (jsonErr) {
-        console.log('Not JSON:', jsonErr);
-      }
-    } catch (e) {
-      console.log('URL decode error:', e);
-    }
-  }
-});
-</script>
-
-
 
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 
@@ -908,5 +882,4 @@
     <script src="/javascripts/main.js"></script>
 
 </body>
-
 </html>
